@@ -1,0 +1,246 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+/* Aplica o cursor preto maior em todo o site */
+body,
+a,
+button,
+input,
+select,
+textarea {
+  cursor: url("https://api.iconify.design/lucide:mouse-pointer-2.svg?color=black&width=32&height=32"),
+    auto !important;
+}
+
+body {
+  background-color: #f8f9fa;
+  color: #222222;
+}
+
+/* Estrutura Principal Dividida em 60/40 */
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* 60% para as informações e formulário */
+.login-section {
+  flex: 6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 30px;
+  background-color: #ffffff;
+}
+
+/* Aumentando a largura máxima da caixa para acomodar letras maiores */
+.login-box {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Textos de Cabeçalho (Bem grandes para leitura fácil) */
+.header h2 {
+  font-size: 2.2rem;
+  color: #111111;
+  margin-bottom: 12px;
+  line-height: 1.25;
+}
+
+.header p {
+  color: #444444;
+  font-size: 1.2rem;
+  margin-bottom: 32px;
+  line-height: 1.4;
+}
+
+/* Estilização Geral dos Botões */
+.btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1.15rem; /* Fonte maior para botões */
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  outline: none;
+}
+
+/* EFEITO DE Destaque / Aumento de tamanho ao passar o mouse ou focar */
+.btn:hover,
+.btn:focus {
+  transform: scale(1.03); /* O botão cresce 3% para destacar */
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.btn-google {
+  background-color: #ffffff;
+  border: 2px solid #cccccc;
+  color: #222222;
+}
+
+.btn-google:hover,
+.btn-google:focus {
+  border-color: #4285f4;
+  background-color: #f4f8ff;
+}
+
+.btn-google img {
+  width: 24px;
+  height: 24px;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border: 2px solid #0d6efd;
+  color: #ffffff;
+  margin-top: 12px;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid #6c757d;
+  color: #333333;
+  margin-top: 16px;
+  text-decoration: none;
+}
+
+.btn-outline:hover,
+.btn-outline:focus {
+  background-color: #e9ecef;
+  color: #000000;
+}
+
+/* Divisor Visual "ou entre com e-mail" (Destacado e bem legível) */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 28px 0;
+  color: #333333; /* Cor mais escura para dar contraste */
+  font-size: 1.1rem; /* Fonte maior */
+  font-weight: 600;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 2px solid #dddddd; /* Linha mais espessa */
+}
+
+.divider span {
+  padding: 0 14px;
+}
+
+/* Campos do Formulário */
+.input-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #222222;
+}
+
+.input-group input {
+  padding: 16px;
+  border: 2px solid #cccccc;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input-group input:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.2);
+}
+
+/* Esqueci a Senha */
+.forgot-pass {
+  font-size: 1.05rem;
+  color: #0d6efd;
+  text-decoration: underline;
+  align-self: flex-end;
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+.forgot-pass:hover,
+.forgot-pass:focus {
+  color: #0a58ca;
+}
+
+/* Rodapé "Ainda não tem conta?" (Aumentado e bem visível) */
+.signup-text {
+  text-align: center;
+  margin-top: 32px;
+  font-size: 1.15rem; /* Aumentado */
+  color: #333333;
+}
+
+.signup-text a {
+  color: #0d6efd;
+  text-decoration: underline;
+  font-weight: 700;
+}
+
+.signup-text a:hover,
+.signup-text a:focus {
+  color: #0a58ca;
+}
+
+/* 40% para a Imagem de Destaque */
+.image-section {
+  flex: 4;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.75)),
+    url("https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1000&auto=format&fit=crop");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  padding: 50px;
+  color: #ffffff;
+}
+
+.overlay-text h3 {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.overlay-text p {
+  font-size: 1.25rem;
+  opacity: 0.95;
+  line-height: 1.4;
+}
+
+/* Responsividade (Para Celulares) */
+@media (max-width: 900px) {
+  .image-section {
+    display: none; /* Em celulares, esconde a imagem para o formulário ocupar 100% da tela */
+  }
+
+  .login-section {
+    flex: 1;
+    padding: 30px 20px;
+  }
+}

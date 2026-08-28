@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organizador da Casa - Login</title>
+  <link rel="stylesheet" href="style-login.css">
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- COLUNA DA ESQUERDA (Formulário - 60% da tela) -->
+    <main class="login-section">
+      <div class="login-box">
+        
+        <header class="header">
+          <h2>Divida as tarefas da sua casa sem estresse</h2>
+          <p>Organize a rotina da sua família e compartilhe as responsabilidades do dia a dia.</p>
+        </header>
+
+        <!-- Botão Google -->
+        <button class="btn btn-google" type="button">
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google Logo">
+          Entrar com o Google
+        </button>
+
+        <div class="divider">
+          <span>ou entre com e-mail</span>
+        </div>
+
+        <!-- Formulário de Email e Senha -->
+        <form>
+          <div class="input-group">
+            <label for="email">Seu e-mail</label>
+            <input type="email" id="email" placeholder="exemplo@email.com" required>
+          </div>
+
+          <div class="input-group">
+            <label for="senha">Sua senha</label>
+            <input type="password" id="senha" placeholder="••••••••" required>
+            <a href="#" class="forgot-pass">Esqueceu a senha?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary">ENTRAR NA CONTA</button>
+        </form>
+
+        <!-- Acesso sem cadastro -->
+        <a href="index.html" class="btn btn-outline">Continuar sem conta por enquanto</a>
+        <p class="signup-text">
+          Ainda não tem conta? <a href="#">Criar nova conta agora</a>
+        </p>
+
+      </div>
+    </main>
+
+    <!-- COLUNA DA DIREITA (Imagem - 40% da tela) -->
+    <aside class="image-section">
+      <div class="overlay-text">
+        <h3>Cuidar da casa é responsabilidade de todos</h3>
+        <p>Crie uma divisão justa de tarefas para os moradores e ganhe mais tempo livre para você.</p>
+      </div>
+    </aside>
+
+  </div>
+
+</body>
+</html>
