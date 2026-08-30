@@ -1,0 +1,515 @@
+<!-- /**
+ * ============================================================================
+ * RELATÓRIO TÉCNICO DE INTEGRAÇÃO (FRONTEND -> BACKEND)
+ * ============================================================================
+ * 
+ * OBJETIVO:
+ * Integrar o formulário de criação de plano personalizado com uma API RESTful 
+ * para persistência dos dados e geração automatizada da escala de tarefas.
+ * 
+ * ----------------------------------------------------------------------------
+ * 1. Mapeamento de Entidades
+ * ----------------------------------------------------------------------------
+ * - Membros da Família: Array de objetos/strings representando os ajudantes.
+ * - Tarefas: Array de objetos contendo o nome da tarefa e a frequência escolhida.
+ * - Escala (Gerada): Objeto/Matriz contendo a distribuição dos membros por dia da semana.
+ * 
+ * ----------------------------------------------------------------------------
+ * 2. Endpoints Necessários (Sugestão REST)
+ * ----------------------------------------------------------------------------
+ * 
+ * [POST] /api/planos/gerar
+ * - Payload de Envio (Request Body):
+ *   {
+ *     "membros": ["Carlos", "Maria"],
+ *     "tarefas": [
+ *       { "nome": "Lavar banheiro", "frequencia": "1x_semana" },
+ *       { "nome": "Lavar louça", "frequencia": "todo_dia" }
+ *     ]
+ *   }
+ * 
+ * - Resposta Esperada (Response Body 200 OK):
+ *   {
+ *     "planoId": "12345",
+ *     "escala": [
+ *       {
+ *         "membro": "Carlos",
+ *         "dias": {
+ *           "segunda": ["Lavar louça"],
+ *           "terca": [],
+ *           "quarta": ["Varrer casa"],
+ *           "quinta": [],
+ *           "sexta": ["Lavar louça"],
+ *           "sabado": [],
+ *           "domingo": ["Tirar o lixo"]
+ *         }
+ *       },
+ *       ...
+ *     ]
+ *   }
+ * 
+ * ----------------------------------------------------------------------------
+ * 3. Comportamentos Necessários no Frontend (Manipulação DOM / JS)
+ * ----------------------------------------------------------------------------
+ * - CRUD Dinâmico na Interface:
+ *   - Adicionar/Remover dinamicamente campos de input para Membros e Tarefas.
+ *   - Capturar o clique do botão "Próximo" na Seção 3 para alternar a tarefa atual.
+ * - Renderização do Resultado:
+ *   - Consumir o JSON retornado pelo backend e preencher dinamicamente a 
+ *     tabela de divisão (`.tabela-tarefas`).
+ * 
+ * ============================================================================
+ */ -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plano Personalizado - Protótipo Visual</title>
+    <style>
+      /* --- Estilos Globais e Tipografia --- */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Verdana, sans-serif;
+        /* Custom Cursor: Seta preta estilizada */
+        cursor: url("https://api.iconify.design/lucide:mouse-pointer-2.svg?color=black&width=32&height=32"),
+          auto;
+      }
+
+      body {
+        background-color: #f8f9fa;
+        color: #2b2b2b;
+        font-size: 18px; /* Fonte levemente maior */
+        line-height: 1.6;
+        padding-top: 80px; /* Compensa o header fixo */
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        color: #1a1a1a;
+        margin-bottom: 25px;
+        text-align: center;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+        color: #333;
+        margin: 30px 0 15px 0;
+        border-bottom: 2px solid #e0e0e0;
+        padding-bottom: 8px;
+      }
+
+      /* --- Header Fixo --- */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background-color: #1e293b;
+        display: flex;
+        align-items: center;
+        padding: 0 30px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+      }
+
+      .btn-home {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1rem;
+        background-color: #334155;
+        padding: 8px 16px;
+        border-radius: 6px;
+        transition: background-color 0.2s, transform 0.2s;
+      }
+
+      .btn-home:hover {
+        background-color: #475569;
+        transform: translateY(-2px);
+      }
+
+      /* --- Estrutura Main --- */
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* Grid 60 / 40 */
+      .grid-2col {
+        display: grid;
+        grid-template-columns: 60% 40%;
+        gap: 25px;
+        align-items: start;
+        margin-bottom: 20px;
+      }
+
+      @media (max-width: 850px) {
+        .grid-2col {
+          grid-template-columns: 100%;
+        }
+      }
+
+      /* --- Retângulos, Inputs e Botões --- */
+      .item-input-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .box-input {
+        width: 100%;
+        padding: 14px;
+        font-size: 1.05rem;
+        border: 2px solid #cbd5e1;
+        border-radius: 8px;
+        background-color: #ffffff;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      }
+
+      /* Efeito Focus/Hover ao interagir ou aproximar do retângulo */
+      .box-input:hover,
+      .box-input:focus,
+      .btn-add:hover {
+        border-color: #2563eb;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .btn-add {
+        width: 100%;
+        padding: 14px;
+        font-size: 1rem;
+        background-color: #f1f5f9;
+        border: 2px dashed #94a3b8;
+        border-radius: 8px;
+        color: #475569;
+        text-align: center;
+        font-weight: bold;
+        transition: all 0.2s;
+        margin-bottom: 15px;
+      }
+
+      .btn-concluir {
+        width: 100%;
+        padding: 14px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        background-color: #16a34a;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        transition: background-color 0.2s, transform 0.2s;
+      }
+
+      .btn-concluir:hover {
+        background-color: #15803d;
+        transform: translateY(-2px);
+      }
+
+      /* --- Ícones de Ação e Tooltips --- */
+      .action-icon {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        background-color: #e2e8f0;
+        border-radius: 6px;
+        font-size: 1.2rem;
+        user-select: none;
+      }
+
+      .action-icon:hover {
+        background-color: #cbd5e1;
+      }
+
+      /* Custom Tooltip */
+      .action-icon[data-tooltip]:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 110%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #0f172a;
+        color: #ffffff;
+        padding: 6px 10px;
+        font-size: 0.8rem;
+        border-radius: 4px;
+        white-space: nowrap;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      /* --- Lado Direito: Área do Exemplo Visual --- */
+      .exemplo-card {
+        position: relative;
+        background-color: #e2e8f0;
+        border: 2px dashed #94a3b8;
+        border-radius: 8px;
+        padding: 20px;
+        opacity: 0.85;
+      }
+
+      .exemplo-card p {
+        font-size: 1rem;
+        color: #475569;
+        margin-bottom: 8px;
+      }
+
+      .exemplo-card:hover::after {
+        content: "← Isso é apenas um exemplo, preencha com suas informações ao lado esquerdo";
+        position: absolute;
+        top: -45px;
+        left: 0;
+        right: 0;
+        background-color: #0f172a;
+        color: #ffffff;
+        padding: 10px 14px;
+        font-size: 0.85rem;
+        border-radius: 6px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        z-index: 20;
+      }
+
+      /* --- Painel / Marquee --- */
+      .painel-container {
+        margin: 35px 0;
+        background-color: #e2e8f0; /* Fundo cinza prateado */
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .painel-legenda {
+        font-size: 0.95rem;
+        font-weight: bold;
+        color: #475569;
+        margin-bottom: 10px;
+      }
+
+      .marquee-wrapper {
+        overflow: hidden;
+        white-space: nowrap;
+        background-color: #cbd5e1;
+        padding: 12px 0;
+        border-radius: 6px;
+      }
+
+      .marquee-content {
+        display: inline-block;
+        color: #15803d; /* Texto Verde */
+        font-weight: bold;
+        font-size: 1.1rem;
+        animation: marquee 25s linear infinite;
+      }
+
+      @keyframes marquee {
+        0% {
+          transform: translateX(0%);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      /* --- Simulação das Etapas Dinâmicas e Tabela --- */
+      .frequencia-box {
+        background-color: #ffffff;
+        border: 2px solid #cbd5e1;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 15px;
+      }
+
+      .options-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin: 15px 0;
+      }
+
+      .options-group label {
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* Tabela Estilizada */
+      .tabela-tarefas {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .tabela-tarefas th,
+      .tabela-tarefas td {
+        border: 1px solid #cbd5e1;
+        padding: 12px;
+        text-align: center;
+        font-size: 0.95rem;
+      }
+
+      .tabela-tarefas th {
+        background-color: #f1f5f9;
+        color: #1e293b;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header Fixo -->
+    <header>
+      <a href="index.html" class="btn-home">← Voltar para Home</a>
+    </header>
+
+    <main>
+      <h1>Seu Plano Personalizado em poucos cliques!</h1>
+
+      <!-- Seção 1: Membros da Família -->
+      <h2>Escreva os nomes de quem pode te ajudar em casa</h2>
+      <div class="grid-2col">
+        <!-- Lado Esquerdo: Formulário / Mapeamento de Interações -->
+        <div>
+          <div class="item-input-group">
+            <input
+              type="text"
+              class="box-input"
+              value="Carlos"
+              placeholder="Digite aqui o nome"
+            />
+            <div class="action-icon" data-tooltip="Editar nome">✏️</div>
+            <div class="action-icon" data-tooltip="Deletar nome">🗑️</div>
+          </div>
+
+          <div class="item-input-group">
+            <input
+              type="text"
+              class="box-input"
+              placeholder="digite aqui o nome"
+            />
+            <div class="action-icon" data-tooltip="Editar nome">✏️</div>
+            <div class="action-icon" data-tooltip="Deletar nome">🗑️</div>
+          </div>
+
+          <div class="btn-add">
+            clique aqui para adicionar mais um membro da familia
+          </div>
+          <button class="btn-concluir">concluir</button>
+        </div>
+
+        <!-- Lado Direito: Exemplo Estático com Hover Tooltip -->
+        <div class="exemplo-card">
+          <p><strong>Exemplos de Membros:</strong></p>
+          <p>• Maria (Mãe)</p>
+          <p>• João (Filho)</p>
+          <p>• Lucas (Irmão)</p>
+        </div>
+      </div>
+
+      <!-- Seção 2: Tarefas da Casa -->
+      <h2>Escreva as tarefas de sua casa</h2>
+      <div style="margin-bottom: 20px">
+        <div class="item-input-group">
+          <input
+            type="text"
+            class="box-input"
+            value="Lavar banheiro"
+            placeholder="clique aqui e escreva uma tarefa"
+          />
+          <div class="action-icon" data-tooltip="Editar tarefa">✏️</div>
+          <div class="action-icon" data-tooltip="Deletar tarefa">🗑️</div>
+        </div>
+
+        <div class="btn-add">clique aqui e escreva mais uma tarefa</div>
+        <button class="btn-concluir">concluir</button>
+      </div>
+
+      <!-- Painel Marquee / Letreiro Digital -->
+      <div class="painel-container">
+        <div class="painel-legenda">
+          Aqui estão alguns exemplos de tarefas domésticas:
+        </div>
+        <div class="marquee-wrapper">
+          <div class="marquee-content">
+            Lavar banheiro ⚫ Lavar louça ⚫ Alimentar animais ⚫ Varrer casa ⚫
+            Arrumar cama ⚫ Dobrar Roupas ⚫ Tirar o lixo ⚫ Limpar fogão ⚫ Tirar
+            pó ⚫ Limpar quintal ⚫ Limpar geladeira ⚫ Lavar banheiro ⚫ Lavar
+            louça ⚫ Alimentar animais ⚫ Varrer casa ⚫ Arrumar cama ⚫ Dobrar
+            Roupas ⚫ Tirar o lixo ⚫ Limpar fogão ⚫ Tirar pó ⚫ Limpar quintal ⚫
+            Limpar geladeira ⚫
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção 3: Frequência (Simulação Visual do Passo a Passo) -->
+      <h2>Com qual frequência gostaria que as atividades fossem realizadas?</h2>
+      <div class="frequencia-box">
+        <p><strong>Tarefa atual:</strong> Lavar banheiro</p>
+
+        <div class="options-group">
+          <label><input type="radio" name="freq" checked /> Todo dia</label>
+          <label><input type="radio" name="freq" /> 3 vezes por semana</label>
+          <label><input type="radio" name="freq" /> 2 vezes por semana</label>
+          <label><input type="radio" name="freq" /> 1 vez por semana</label>
+        </div>
+
+        <button class="btn-concluir" style="width: auto; padding: 10px 25px">
+          Próximo
+        </button>
+      </div>
+
+      <!-- Seção 4: Tabela de Divisão -->
+      <h2>Aqui esta uma tabela de divisão das tarefas domésticas!</h2>
+      <table class="tabela-tarefas">
+        <thead>
+          <tr>
+            <th>Responsável</th>
+            <th>Segunda</th>
+            <th>Terça</th>
+            <th>Quarta</th>
+            <th>Quinta</th>
+            <th>Sexta</th>
+            <th>Sábado</th>
+            <th>Domingo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Carlos</strong></td>
+            <td>Lavar louça</td>
+            <td>—</td>
+            <td>Varrer casa</td>
+            <td>—</td>
+            <td>Lavar louça</td>
+            <td>—</td>
+            <td>Tirar o lixo</td>
+          </tr>
+          <tr>
+            <td><strong>Maria</strong></td>
+            <td>—</td>
+            <td>Lavar banheiro</td>
+            <td>—</td>
+            <td>Arrumar cama</td>
+            <td>—</td>
+            <td>Limpar fogão</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table><br>
+      <p><b>Clique Aqui</b> para baixar sua tabela em PDF para que você possa depois imprimir e deixar na geladeira</p>
+    </main>
+  </body>
+</html>
