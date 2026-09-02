@@ -18,12 +18,13 @@ textarea {
 body {
   background-color: #f8f9fa;
   color: #222222;
+  overflow-x: hidden;
 }
 
 /* Estrutura Principal Dividida em 60/40 */
 .container {
   display: flex;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* 60% para as informações e formulário */
@@ -32,7 +33,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 50px 30px;
+  padding: clamp(20px, 5vh, 50px) 30px;
   background-color: #ffffff;
 }
 
@@ -44,26 +45,27 @@ body {
 
 /* Textos de Cabeçalho (Bem grandes para leitura fácil) */
 .header h2 {
-  font-size: 2.2rem;
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
   color: #111111;
-  margin-bottom: 12px;
+  margin-bottom: clamp(6px, 1.5vh, 12px);
   line-height: 1.25;
 }
 
 .header p {
   color: #444444;
-  font-size: 1.2rem;
-  margin-bottom: 32px;
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  margin-bottom: clamp(16px, 3vh, 32px);
   line-height: 1.4;
 }
 
 /* Estilização Geral dos Botões */
 .btn {
   width: 100%;
-  padding: 16px;
+  min-height: 44px;
+  padding: clamp(10px, 1.8vh, 16px);
   border-radius: 10px;
   font-weight: 700;
-  font-size: 1.15rem; /* Fonte maior para botões */
+  font-size: clamp(1rem, 1.7vw, 1.15rem);
   cursor: pointer;
   transition: all 0.25s ease-in-out;
   display: flex;
@@ -129,9 +131,9 @@ body {
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 28px 0;
+  margin: clamp(14px, 3vh, 28px) 0;
   color: #333333; /* Cor mais escura para dar contraste */
-  font-size: 1.1rem; /* Fonte maior */
+  font-size: clamp(0.9rem, 1.6vw, 1.1rem);
   font-weight: 600;
 }
 
@@ -148,23 +150,24 @@ body {
 
 /* Campos do Formulário */
 .input-group {
-  margin-bottom: 20px;
+  margin-bottom: clamp(10px, 2vh, 20px);
   display: flex;
   flex-direction: column;
 }
 
 .input-group label {
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 1.6vw, 1.1rem);
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: clamp(5px, 1vh, 8px);
   color: #222222;
 }
 
 .input-group input {
-  padding: 16px;
+  min-height: 44px;
+  padding: clamp(10px, 1.8vh, 16px);
   border: 2px solid #cccccc;
   border-radius: 10px;
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 1.6vw, 1.1rem);
   outline: none;
   transition: all 0.2s ease;
 }
@@ -176,11 +179,11 @@ body {
 
 /* Esqueci a Senha */
 .forgot-pass {
-  font-size: 1.05rem;
+  font-size: clamp(0.9rem, 1.5vw, 1.05rem);
   color: #0d6efd;
   text-decoration: underline;
   align-self: flex-end;
-  margin-top: 8px;
+  margin-top: clamp(4px, 1vh, 8px);
   font-weight: 600;
 }
 
@@ -192,8 +195,8 @@ body {
 /* Rodapé "Ainda não tem conta?" (Aumentado e bem visível) */
 .signup-text {
   text-align: center;
-  margin-top: 32px;
-  font-size: 1.15rem; /* Aumentado */
+  margin-top: clamp(16px, 3vh, 32px);
+  font-size: clamp(0.95rem, 1.7vw, 1.15rem);
   color: #333333;
 }
 
@@ -233,6 +236,26 @@ body {
   line-height: 1.4;
 }
 
+/* Desktop compacto: evita rolagem em janelas menores ou com zoom, sem ocultar conteúdo. */
+@media (min-width: 901px) and (max-height: 900px) {
+  .login-section { padding-top: 24px; padding-bottom: 24px; }
+  .login-box { max-width: 440px; }
+  .header h2 { font-size: 1.9rem; }
+  .header p { font-size: 1.05rem; margin-bottom: 18px; }
+  .btn { padding: 10px; font-size: 1rem; }
+  .divider { margin: 16px 0; font-size: 0.95rem; }
+  .input-group { margin-bottom: 12px; }
+  .input-group label { font-size: 1rem; margin-bottom: 5px; }
+  .input-group input { padding: 10px 12px; font-size: 1rem; }
+  .forgot-pass { font-size: 0.9rem; margin-top: 5px; }
+  .btn-primary { margin-top: 8px; }
+  .btn-outline { margin-top: 12px; }
+  .signup-text { margin-top: 18px; font-size: 1rem; }
+  .image-section { padding: 32px; }
+  .overlay-text h3 { font-size: 1.8rem; }
+  .overlay-text p { font-size: 1.05rem; }
+}
+
 /* Responsividade (Para Celulares) */
 @media (max-width: 900px) {
   .image-section {
@@ -241,6 +264,24 @@ body {
 
   .login-section {
     flex: 1;
-    padding: 30px 20px;
+    padding: clamp(18px, 4vh, 30px) 20px;
   }
+}
+
+@media (max-width: 480px) {
+  .login-section { min-height: 100dvh; padding: clamp(16px, 3vh, 24px) 18px; }
+  .header h2 { font-size: clamp(1.45rem, 7vw, 1.7rem); }
+  .btn { font-size: 1rem; }
+  .divider { font-size: 0.9rem; }
+  .divider span { padding: 0 8px; }
+  .signup-text { line-height: 1.4; }
+}
+
+/* Telas baixas, comuns em celulares na horizontal ou com zoom: reduz apenas os espaços. */
+@media (max-height: 700px) and (max-width: 900px) {
+  .login-section { align-items: flex-start; padding-top: 14px; padding-bottom: 14px; }
+  .header p { margin-bottom: 12px; }
+  .divider { margin: 12px 0; }
+  .input-group { margin-bottom: 8px; }
+  .signup-text { margin-top: 12px; }
 }
