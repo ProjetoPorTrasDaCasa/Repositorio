@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Paleta de Cores</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f0f0f0;
+      padding: 20px;
+    }
+
+    h2 {
+      margin-top: 30px;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .quadrado {
+      width: 160px;
+      height: 160px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    /* Cores de texto para contraste */
+    .texto-escuro { color: #333; }
+    .texto-claro { color: #fff; }
+  </style>
+</head>
+<body>
+    <a href="./index.html">voltar a home</a>
+
+  <h2>Cor Principal</h2>
+  <div class="container">
+    <div class="quadrado texto-claro" style="background-color: #E88A3D;">#E88A3D</div>
+  </div>
+
+  <h2>Cores Secundárias</h2>
+  <div class="container">
+    <div class="quadrado texto-escuro" style="background-color: #F4A261;">#F4A261</div>
+    <div class="quadrado texto-escuro" style="background-color: #F6B98A;">#F6B98A</div>
+    <div class="quadrado texto-escuro" style="background-color: #F3C6A5;">#F3C6A5</div>
+    <div class="quadrado texto-escuro" style="background-color: #D9B98C;">#D9B98C</div>
+    <div class="quadrado texto-escuro" style="background-color: #F7E6D0;">#F7E6D0</div>
+  </div>
+
+  <h2>Cores Alternativas</h2>
+  <div class="container">
+    <div class="quadrado texto-escuro" style="background-color: #F2C14E;">#F2C14E</div>
+    <div class="quadrado texto-claro" style="background-color: #8A9465;">#8A9465</div>
+    <div class="quadrado texto-claro" style="background-color: #604438;">#604438</div>
+  </div>
+
+</body>
+</html>
