@@ -45,7 +45,7 @@ input {
 
 .logo h1 {
   font-size: 1.6rem;
-  color: #0d6efd;
+  color: #ffb74d;
 }
 
 .nav-links {
@@ -63,7 +63,7 @@ input {
 .nav-links a {
   display: block;
   text-decoration: none;
-  color: #222222;
+  color: #3F3029;
   font-weight: bold;
   font-size: 1.1rem;
   padding: 8px 12px;
@@ -79,14 +79,14 @@ input {
 }
 
 .btn-nav-login {
-  background-color: #0d6efd;
-  color: #ffffff !important;
+  background-color: #FFC857;
+  color: #35231B !important;
   padding: 10px 20px !important;
   border-radius: 8px;
 }
 
 .btn-nav-login:hover {
-  background-color: #0b5ed7 !important;
+  background-color: #ffd580 !important;
 }
 
 /* ESTRUTURA DAS SEÇÕES */
@@ -106,7 +106,7 @@ input {
 .section h2 {
   font-size: clamp(1.8rem, 5vw, 2.3rem);
   margin-bottom: 20px;
-  color: #111111;
+  color: #35231B;
 }
 
 .placeholder-text {
@@ -158,7 +158,7 @@ input {
 
 /* 1.5. SEÇÃO INFORMATIVA */
 .informativo-section {
-  background-color: #e9ecef;
+  background-color: #FDF4E3;
 }
 
 .informativo-section p {
@@ -208,12 +208,12 @@ input {
 }
 
 .btn-hero {
-  background-color: #0d6efd;
-  color: #ffffff;
+  background-color: #FFC857;
+  color: #35231B;
 }
 
 .btn-secondary {
-  background-color: #198754;
+  background-color: #ED820E;
   color: #ffffff;
 }
 
@@ -235,7 +235,7 @@ input {
 
 .card {
   flex: 1;
-  background: #ffffff;
+  background: #F7E6D0;
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
@@ -244,7 +244,7 @@ input {
 .card h3 {
   font-size: 1.5rem;
   margin-bottom: 10px;
-  color: #0d6efd;
+  color: #35231B;
 }
 
 .card p {
@@ -257,7 +257,7 @@ input {
 
 /* 3. SEÇÃO SOBRE NÓS & 4. CONTATO */
 .sobre-section {
-  background-color: #e9ecef;
+  background-color: #FDF4E3;
 }
 
 .contato-section {
@@ -268,7 +268,7 @@ input {
 footer {
   text-align: center;
   padding: 25px;
-  background-color: #111111;
+  background-color: #35231B;
   color: #ffffff;
   font-size: 1.1rem;
 }
