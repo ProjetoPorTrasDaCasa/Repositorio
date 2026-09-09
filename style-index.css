@@ -34,7 +34,7 @@ input {
 .navbar {
   position: sticky;
   top: 0;
-  background-color: #ffffff;
+  background-color: #FDF4E3;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -43,9 +43,25 @@ input {
   z-index: 1000;
 }
 
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
 .logo h1 {
   font-size: 1.6rem;
-  color: #ffb74d;
+  color: #35213B;
+}
+
+.logo h1 span {
+  color: #FFB74D;
 }
 
 .nav-links {
@@ -74,7 +90,7 @@ input {
 
 .nav-links a:hover,
 .nav-links a:focus {
-  color: #0d6efd;
+  color: #fdb524;
   background-color: #e9ecef;
 }
 
@@ -83,10 +99,18 @@ input {
   color: #35231B !important;
   padding: 10px 20px !important;
   border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+
+.btn-nav-login i {
+  font-size: 1.1rem;
 }
 
 .btn-nav-login:hover {
-  background-color: #ffd580 !important;
+  background-color: #ED820E !important;
 }
 
 /* ESTRUTURA DAS SEÇÕES */
@@ -172,7 +196,7 @@ input {
 
 /* Transforma o <button> no mesmo estilo visual dos botões do site */
 .informativo-section button {
-  background-color: #0d6efd;
+  background-color: #FFC857;
   color: #ffffff;
   font-size: 1.25rem;
   font-weight: bold;
@@ -185,7 +209,7 @@ input {
 
 .informativo-section button:hover,
 .informativo-section button:focus {
-  background-color: #0b5ed7;
+  background-color: #FFC857;
   transform: scale(1.04);
   box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
 }
@@ -208,13 +232,13 @@ input {
 }
 
 .btn-hero {
-  background-color: #FFC857;
-  color: #35231B;
+  background-color: #ED820E;
+  color: #35213B;
 }
 
 .btn-secondary {
   background-color: #ED820E;
-  color: #ffffff;
+  color: #35213B;
 }
 
 /* 2. SEÇÃO DE CURSOS */
@@ -327,6 +351,11 @@ footer {
   .navbar {
     align-items: stretch;
     padding: 14px 20px;
+  }
+
+  .logo img {
+    width: 40px;
+    height: 40px;
   }
 
   .logo h1 {

@@ -1,126 +1,134 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Organizador Doméstico - Início</title>
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/8/89/Artworkbean_broom.svg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original"/>
-    <link rel="stylesheet" href="style-index.css" />
-  </head>
-  <body>
-    <!-- MENU DE NAVEGAÇÃO FIXO -->
-    <header class="navbar">
-      <div class="logo">
-        <h1>Por Trás da Casa</h1>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Organizador Doméstico - Início</title>
+  <link rel="icon" href="fotoevideo/Logo.png" />
+  <link rel="stylesheet" href="style-index.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+  <!-- MENU DE NAVEGAÇÃO FIXO -->
+  <header class="navbar">
+    <div class="logo">
+      <img src="fotoevideo/Logo.png" alt="Logo Por Trás da Casa">
+      <h1>Por Trás <span>da Casa</span></h1>
+    </div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#tarefas">Tarefas</a></li>
+        <li><a href="#informativo">informativo</a></li>
+        <li><a href="#cursos">Cursos</a></li>
+        <li><a href="#sobre">Sobre Nós</a></li>
+        <li><a href="#contato">Contato</a></li>
+        <li><a href="login.html" class="btn-nav-login">
+            <i class="fa-solid fa-user"></i>
+            Login / Entrar
+          </a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 1. SEÇÃO PRINCIPAL (HERO / TAREFAS) -->
+    <section id="tarefas" class="section hero-section">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h2>Divisão Justa de Tarefas Domésticas</h2>
+          <p class="hero-subtitle">
+            Crie uma rotina equilibrada onde toda a família colabora no dia a dia.
+          </p>
+          <a href="DivisorDeTarefas.html" class="btn btn-hero">Criar Divisão de Tarefas</a>
+        </div>
+        <div class="hero-image">
+          <video loop controls width="100%">
+            <source src="./fotoevideo/VideoEntrevista.mp4" type="video/mp4" />
+          </video>
+        </div>
       </div>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="#tarefas">Tarefas</a></li>
-          <li><a href="#informativo">informativo</a></li>
-          <li><a href="#cursos">Cursos</a></li>
-          <li><a href="#sobre">Sobre Nós</a></li>
-          <li><a href="#contato">Contato</a></li>
-          <li><a href="login.html" class="btn-nav-login">Login / Entrar</a></li>
-        </ul>
-      </nav>
-    </header>
+    </section>
 
-    <main>
-      <!-- 1. SEÇÃO PRINCIPAL (HERO / TAREFAS) -->
-      <section id="tarefas" class="section hero-section">
-        <div class="hero-content">
-          <div class="hero-text">
-            <h2>Divisão Justa de Tarefas Domésticas</h2>
-            <p class="hero-subtitle">
-              Crie uma rotina equilibrada onde toda a família colabora no dia a dia.
+    <!-- 1.5 SEÇÃO INFORMATIVA -->
+    <section id="informativo" class="section informativo-section">
+      <div class="section-container">
+        <h2>O Trabalho que ninguém vê</h2>
+        <p class="placeholder-text">
+          Enquanto o dia termina para alguns, para outras pessoas o trabalho
+          continua. Limpar a casa, preparar a comida, lavar roupas, cuidar dos
+          filhos e organizar a rotina também consome horas do dia — mas esse
+          esforço muitas vezes passa despercebido e não recebe remuneração.
+          Você ja se perguntou quanto tempo da sua vida é gasto mantendo uma
+          casa funcionando?
+        </p>
+
+        <div class="informativo-action">
+          <a href="evidencias.html" class="btn btn-hero">Clique aqui e descubra</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. SEÇÃO DE CURSOS -->
+    <section id="cursos" class="section cursos-section">
+      <div class="section-container">
+        <h2>Cursos Profissionalizantes</h2>
+        <p class="section-intro">
+          Capacitação e novos conhecimentos ao seu alcance: aprenda Inglês
+          Básico e outros cursos para fortalecer sua autonomia.
+        </p>
+
+        <div class="cursos-cards">
+          <div class="card">
+            <h3>Inglês Básico</h3>
+            <p>
+              Aprenda expressões do dia a dia de forma simples, prática e no
+              seu tempo.
             </p>
-            <a href="DivisorDeTarefas.html" class="btn btn-hero"
-              >Criar Divisão de Tarefas</a
-            >
           </div>
-          <div class="hero-image">
-            <video loop controls width="100%">
-              <source src="./fotoevideo/VideoEntrevista.mp4" type="video/mp4" />
-            </video>
+          <div class="card">
+            <h3>Outras Capacitações</h3>
+            <p>
+              Conteúdos focados no seu desenvolvimento pessoal e profissional.
+            </p>
           </div>
         </div>
-      </section>
 
-      <!-- 1.5 SEÇÃO INFORMATIVA -->
-      <section id="informativo" class="section informativo-section">
-        <div class="section-container">
-          <h2>O Trabalho que ninguém vê</h2>
-          <p class="placeholder-text">
-            Enquanto o dia termina para alguns, para outras pessoas o trabalho
-            continua. Limpar a casa, preparar a comida, lavar roupas, cuidar dos
-            filhos e organizar a rotina também consome horas do dia — mas esse
-            esforço muitas vezes passa despercebido e não recebe remuneração.
-            Você ja se perguntou quanto tempo da sua vida é gasto mantendo uma
-            casa funcionando?
-          </p>
-
-          <div class="informativo-action">
-            <a href="evidencias.html" class="btn btn-hero">Clique aqui e descubra</a>
-          </div>
+        <div class="cursos-action">
+          <a href="cursos.html" class="btn btn-secondary">Acessar Área de Cursos</a>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- 2. SEÇÃO DE CURSOS -->
-      <section id="cursos" class="section cursos-section">
-        <div class="section-container">
-          <h2>Cursos Profissionalizantes</h2>
-          <p class="section-intro">
-            Capacitação e novos conhecimentos ao seu alcance: aprenda Inglês
-            Básico e outros cursos para fortalecer sua autonomia.
-          </p>
+    <!-- 3. SEÇÃO SOBRE NÓS -->
+    <section id="sobre" class="section sobre-section">
+      <div class="section-container">
+        <h2>Sobre Nós</h2>
+        <p class="placeholder-text">
+          Somos um grupo de estudantes filantropos que relizando estudos e nossas vivências, decidimos colocar em
+          prática uma ação beneficente de conscientização através deste blog para auxiliar pessoas na divisão de tarefas
+          domésticas.
+        </p>
+      </div>
+    </section>
 
-          <div class="cursos-cards">
-            <div class="card">
-              <h3>Inglês Básico</h3>
-              <p>
-                Aprenda expressões do dia a dia de forma simples, prática e no
-                seu tempo.
-              </p>
-            </div>
-            <div class="card">
-              <h3>Outras Capacitações</h3>
-              <p>
-                Conteúdos focados no seu desenvolvimento pessoal e profissional.
-              </p>
-            </div>
-          </div>
+    <!-- 4. SEÇÃO CONTATO -->
+    <section id="contato" class="section contato-section">
+      <div class="section-container">
+        <h2>Contato e Sugestões</h2>
+        <p class="placeholder-text">
+          Esta área é destinada ao nosso SAC.
+          <br>
+          Queremos ouvir de você, quais suas sugestões e dúvidas para melhorar o sistema?
+        </p>
+      </div>
+    </section>
+  </main>
 
-          <div class="cursos-action">
-            <a href="cursos.html" class="btn btn-secondary">Acessar Área de Cursos</a>
-          </div>
-        </div>
-      </section>
+  <footer>
+    <p>&copy; 2026 Cuidar Juntos - Apoio e Divisão de Tarefas Domésticas.</p>
+  </footer>
+</body>
 
-      <!-- 3. SEÇÃO SOBRE NÓS -->
-      <section id="sobre" class="section sobre-section">
-        <div class="section-container">
-          <h2>Sobre Nós</h2>
-          <p class="placeholder-text">
-            Somos um grupo de estudantes filantropos que relizando estudos e nossas vivências, decidimos colocar em prática uma ação beneficente de conscientização através deste blog para auxiliar pessoas na divisão de tarefas domésticas.
-          </p>
-        </div>
-      </section>
-
-      <!-- 4. SEÇÃO CONTATO -->
-      <section id="contato" class="section contato-section">
-        <div class="section-container">
-          <h2>Contato e Sugestões</h2>
-          <p class="placeholder-text">
-            Esta área é destinada ao nosso SAC.
-            <br>
-            Queremos ouvir de você, quais suas sugestões e dúvidas para melhorar o sistema?
-          </p>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <p>&copy; 2026 Cuidar Juntos - Apoio e Divisão de Tarefas Domésticas.</p>
-    </footer>
-  </body>
 </html>
