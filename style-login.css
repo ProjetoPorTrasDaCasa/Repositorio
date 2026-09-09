@@ -90,7 +90,7 @@ body {
 
 .btn-google:hover,
 .btn-google:focus {
-  border-color: #4285f4;
+  border-color: #FFC857;
   background-color: #f4f8ff;
 }
 
@@ -100,16 +100,16 @@ body {
 }
 
 .btn-primary {
-  background-color: #0d6efd;
-  border: 2px solid #0d6efd;
+  background-color: #FFC857;
+  border: 2px solid #FFC857;
   color: #ffffff;
   margin-top: 12px;
 }
 
 .btn-primary:hover,
 .btn-primary:focus {
-  background-color: #0b5ed7;
-  border-color: #0a58ca;
+  background-color: #ED820E;
+  border-color: #ffd580;
 }
 
 .btn-outline {
@@ -173,14 +173,14 @@ body {
 }
 
 .input-group input:focus {
-  border-color: #0d6efd;
+  border-color: #ffd580;
   box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.2);
 }
 
 /* Esqueci a Senha */
 .forgot-pass {
   font-size: clamp(0.9rem, 1.5vw, 1.05rem);
-  color: #0d6efd;
+  color: #ED820E;
   text-decoration: underline;
   align-self: flex-end;
   margin-top: clamp(4px, 1vh, 8px);
@@ -189,7 +189,7 @@ body {
 
 .forgot-pass:hover,
 .forgot-pass:focus {
-  color: #0a58ca;
+  color: #FFC857;
 }
 
 /* Rodapé "Ainda não tem conta?" (Aumentado e bem visível) */
@@ -201,14 +201,14 @@ body {
 }
 
 .signup-text a {
-  color: #0d6efd;
+  color: #ED820E;
   text-decoration: underline;
   font-weight: 700;
 }
 
 .signup-text a:hover,
 .signup-text a:focus {
-  color: #0a58ca;
+  color: #FFC857;
 }
 
 /* 40% para a Imagem de Destaque */
