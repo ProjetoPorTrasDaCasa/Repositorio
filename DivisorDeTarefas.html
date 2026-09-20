@@ -1,538 +1,2092 @@
-<!-- /**
- * ============================================================================
- * RELATÓRIO TÉCNICO DE INTEGRAÇÃO (FRONTEND -> BACKEND)
- * ============================================================================
- * 
- * OBJETIVO:
- * Integrar o formulário de criação de plano personalizado com uma API RESTful 
- * para persistência dos dados e geração automatizada da escala de tarefas.
- * 
- * ----------------------------------------------------------------------------
- * 1. Mapeamento de Entidades
- * ----------------------------------------------------------------------------
- * - Membros da Família: Array de objetos/strings representando os ajudantes.
- * - Tarefas: Array de objetos contendo o nome da tarefa e a frequência escolhida.
- * - Escala (Gerada): Objeto/Matriz contendo a distribuição dos membros por dia da semana.
- * 
- * ----------------------------------------------------------------------------
- * 2. Endpoints Necessários (Sugestão REST)
- * ----------------------------------------------------------------------------
- * 
- * [POST] /api/planos/gerar
- * - Payload de Envio (Request Body):
- *   {
- *     "membros": ["Carlos", "Maria"],
- *     "tarefas": [
- *       { "nome": "Lavar banheiro", "frequencia": "1x_semana" },
- *       { "nome": "Lavar louça", "frequencia": "todo_dia" }
- *     ]
- *   }
- * 
- * - Resposta Esperada (Response Body 200 OK):
- *   {
- *     "planoId": "12345",
- *     "escala": [
- *       {
- *         "membro": "Carlos",
- *         "dias": {
- *           "segunda": ["Lavar louça"],
- *           "terca": [],
- *           "quarta": ["Varrer casa"],
- *           "quinta": [],
- *           "sexta": ["Lavar louça"],
- *           "sabado": [],
- *           "domingo": ["Tirar o lixo"]
- *         }
- *       },
- *       ...
- *     ]
- *   }
- * 
- * ----------------------------------------------------------------------------
- * 3. Comportamentos Necessários no Frontend (Manipulação DOM / JS)
- * ----------------------------------------------------------------------------
- * - CRUD Dinâmico na Interface:
- *   - Adicionar/Remover dinamicamente campos de input para Membros e Tarefas.
- *   - Capturar o clique do botão "Próximo" na Seção 3 para alternar a tarefa atual.
- * - Renderização do Resultado:
- *   - Consumir o JSON retornado pelo backend e preencher dinamicamente a 
- *     tabela de divisão (`.tabela-tarefas`).
- * 
- * ============================================================================
- */ -->
-
 <!DOCTYPE html>
-<html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Organizador Doméstico - Protótipo</title>
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/8/89/Artworkbean_broom.svg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original"/>
-    <style>
-      /* --- Estilos Globais e Tipografia --- */
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: Verdana, sans-serif;
-        /* Custom Cursor: Seta preta estilizada */
-        cursor: url("https://api.iconify.design/lucide:mouse-pointer-2.svg?color=black&width=32&height=32"),
-          auto;
-      }
+<html lang="pt-BR">
 
-      body {
-        background-color: #f8f9fa;
-        color: #2b2b2b;
-        font-size: 18px; /* Fonte levemente maior */
-        line-height: 1.6;
-        padding-top: 80px; /* Compensa o header fixo */
-        overflow-x: hidden;
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-      h1 {
-        font-size: 1.8rem;
-        color: #1a1a1a;
-        margin-bottom: 25px;
-        text-align: center;
-      }
+  <title>Divisor de Tarefas - Por Trás da Casa</title>
 
-      h2 {
-        font-size: 1.3rem;
-        color: #333;
-        margin: 30px 0 15px 0;
-        border-bottom: 2px solid #e0e0e0;
-        padding-bottom: 8px;
-      }
+  <link rel="icon" href="fotoevideo/Logo.png">
 
-      /* --- Header Fixo --- */
-      header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 60px;
-        background-color: #1e293b;
-        display: flex;
-        align-items: center;
-        padding: 0 30px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-        z-index: 1000;
-      }
+  <!-- CSS PRINCIPAL DO PROJETO -->
+  <link rel="stylesheet" href="style-index.css">
 
-      .btn-home {
-        color: #ffffff;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 1rem;
-        background-color: #334155;
-        padding: 8px 16px;
-        border-radius: 6px;
-        transition: background-color 0.2s, transform 0.2s;
-      }
+  <!-- CSS ESPECÍFICO DESTA PÁGINA -->
+  <link rel="stylesheet" href="style-divisor.css">
 
-      .btn-home:hover {
-        background-color: #475569;
-        transform: translateY(-2px);
-      }
+  <!-- FONT AWESOME -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
 
-      /* --- Estrutura Main --- */
-      main {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-      }
+<body>
 
-      /* Grid 60 / 40 */
-      .grid-2col {
-        display: grid;
-        grid-template-columns: minmax(0, 3fr) minmax(260px, 2fr);
-        gap: 25px;
-        align-items: start;
-        margin-bottom: 20px;
-      }
+  <!-- =====================================================
+         MENU DE NAVEGAÇÃO
+         ===================================================== -->
 
-      @media (max-width: 850px) {
-        .grid-2col {
-          grid-template-columns: 100%;
-        }
-      }
+  <header class="navbar">
 
-      /* --- Retângulos, Inputs e Botões --- */
-      .item-input-group {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 12px;
-      }
+    <div class="logo">
 
-      .box-input {
-        width: 100%;
-        padding: 14px;
-        font-size: 1.05rem;
-        border: 2px solid #cbd5e1;
-        border-radius: 8px;
-        background-color: #ffffff;
-        outline: none;
-        transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-      }
+      <img src="fotoevideo/Logo.png" alt="Logo Por Trás da Casa">
 
-      /* Efeito Focus/Hover ao interagir ou aproximar do retângulo */
-      .box-input:hover,
-      .box-input:focus,
-      .btn-add:hover {
-        border-color: #2563eb;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-        transform: translateY(-2px);
-      }
+      <h1>
+        Por Trás
+        <span>da Casa</span>
+      </h1>
 
-      .btn-add {
-        width: 100%;
-        padding: 14px;
-        font-size: 1rem;
-        background-color: #f1f5f9;
-        border: 2px dashed #94a3b8;
-        border-radius: 8px;
-        color: #475569;
-        text-align: center;
-        font-weight: bold;
-        transition: all 0.2s;
-        margin-bottom: 15px;
-      }
+    </div>
 
-      .btn-concluir {
-        width: 100%;
-        padding: 14px;
-        font-size: 1.1rem;
-        font-weight: bold;
-        background-color: #16a34a;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        transition: background-color 0.2s, transform 0.2s;
-      }
 
-      .btn-concluir:hover {
-        background-color: #15803d;
-        transform: translateY(-2px);
-      }
+    <nav>
 
-      /* --- Ícones de Ação e Tooltips --- */
-      .action-icon {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 42px;
-        height: 42px;
-        background-color: #e2e8f0;
-        border-radius: 6px;
-        font-size: 1.2rem;
-        user-select: none;
-      }
+      <ul class="nav-links">
 
-      .action-icon:hover {
-        background-color: #cbd5e1;
-      }
+        <li>
+          <a href="index.html#tarefas" class="active">
+            Tarefas
+          </a>
+        </li>
 
-      /* Custom Tooltip */
-      .action-icon[data-tooltip]:hover::after {
-        content: attr(data-tooltip);
-        position: absolute;
-        bottom: 110%;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: #0f172a;
-        color: #ffffff;
-        padding: 6px 10px;
-        font-size: 0.8rem;
-        border-radius: 4px;
-        white-space: nowrap;
-        pointer-events: none;
-        z-index: 10;
-      }
+        <li>
+          <a href="index.html#informativo">
+            Informativo
+          </a>
+        </li>
 
-      /* --- Lado Direito: Área do Exemplo Visual --- */
-      .exemplo-card {
-        position: relative;
-        background-color: #e2e8f0;
-        border: 2px dashed #94a3b8;
-        border-radius: 8px;
-        padding: 20px;
-        opacity: 0.85;
-      }
+        <li>
+          <a href="index.html#cursos">
+            Cursos
+          </a>
+        </li>
 
-      .exemplo-card p {
-        font-size: 1rem;
-        color: #475569;
-        margin-bottom: 8px;
-      }
+        <li>
+          <a href="index.html#sobre">
+            Sobre Nós
+          </a>
+        </li>
 
-      .exemplo-card:hover::after {
-        content: "← Isso é apenas um exemplo, preencha com suas informações ao lado esquerdo";
-        position: absolute;
-        top: -45px;
-        left: 0;
-        right: 0;
-        background-color: #0f172a;
-        color: #ffffff;
-        padding: 10px 14px;
-        font-size: 0.85rem;
-        border-radius: 6px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        z-index: 20;
-      }
+        <li>
+          <a href="index.html#contato">
+            Contato
+          </a>
+        </li>
 
-      /* --- Painel / Marquee --- */
-      .painel-container {
-        margin: 35px 0;
-        background-color: #e2e8f0; /* Fundo cinza prateado */
-        border-radius: 8px;
-        padding: 15px;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-      }
+        <li>
 
-      .painel-legenda {
-        font-size: 0.95rem;
-        font-weight: bold;
-        color: #475569;
-        margin-bottom: 10px;
-      }
+          <a href="login.html" class="btn-nav-login">
+            <i class="fa-solid fa-user"></i>
 
-      .marquee-wrapper {
-        overflow: hidden;
-        white-space: nowrap;
-        background-color: #cbd5e1;
-        padding: 12px 0;
-        border-radius: 6px;
-      }
+            Login / Entrar
+          </a>
 
-      .marquee-content {
-        display: inline-block;
-        color: #15803d; /* Texto Verde */
-        font-weight: bold;
-        font-size: 1.1rem;
-        animation: marquee 25s linear infinite;
-      }
+        </li>
 
-      @keyframes marquee {
-        0% {
-          transform: translateX(0%);
-        }
-        100% {
-          transform: translateX(-50%);
-        }
-      }
+      </ul>
 
-      /* --- Simulação das Etapas Dinâmicas e Tabela --- */
-      .frequencia-box {
-        background-color: #ffffff;
-        border: 2px solid #cbd5e1;
-        padding: 20px;
-        border-radius: 8px;
-        margin-top: 15px;
-      }
+    </nav>
 
-      .options-group {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin: 15px 0;
-      }
+  </header>
 
-      .options-group label {
-        font-size: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
 
-      /* Tabela Estilizada */
-      .tabela-tarefas {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 15px;
-        background-color: #ffffff;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      }
+  <!-- =====================================================
+         CONTEÚDO PRINCIPAL
+         ===================================================== -->
 
-      .tabela-tarefas th,
-      .tabela-tarefas td {
-        border: 1px solid #cbd5e1;
-        padding: 12px;
-        text-align: center;
-        font-size: 0.95rem;
-      }
+  <main class="divisor-main">
 
-      .tabela-tarefas th {
-        background-color: #f1f5f9;
-        color: #1e293b;
-      }
 
-      .tabela-wrapper {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        border-radius: 8px;
-      }
+    <!-- =================================================
+             BLOCO 1
+             CADASTRO DAS PESSOAS
+             ================================================= -->
 
-      @media (max-width: 600px) {
-        body { font-size: 16px; padding-top: 70px; }
-        header { height: 54px; padding: 0 16px; }
-        .btn-home { font-size: 0.9rem; padding: 7px 12px; }
-        main { padding: 16px; }
-        h1 { font-size: 1.5rem; }
-        .item-input-group { flex-wrap: wrap; }
-        .box-input { flex: 1 1 100%; }
-        .action-icon { width: 38px; height: 38px; }
-        .exemplo-card:hover::after { display: none; }
-        .tabela-tarefas { min-width: 760px; }
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Header Fixo -->
-    <header>
-      <a href="index.html" class="btn-home">← Voltar para o início</a>
-    </header>
+    <section id="bloco1" class="etapa-container">
 
-    <main>
-      <h1>Seu Plano Personalizado em poucos cliques!</h1>
+      <div class="cabecalho-etapa">
 
-      <!-- Seção 1: Membros da Família -->
-      <h2>Escreva os nomes de quem pode te ajudar em casa</h2>
-      <div class="grid-2col">
-        <!-- Lado Esquerdo: Formulário / Mapeamento de Interações -->
         <div>
-          <div class="item-input-group">
-            <input
-              type="text"
-              class="box-input"
-              value="Carlos"
-              placeholder="Digite aqui o nome"
-            />
-            <div class="action-icon" data-tooltip="Editar nome">✏️</div>
-            <div class="action-icon" data-tooltip="Deletar nome">🗑️</div>
+
+          <div class="breadcrumb">
+
+            <i class="fa-solid fa-house"></i>
+
+            <span>Tarefas</span>
+
           </div>
 
-          <div class="item-input-group">
-            <input
-              type="text"
-              class="box-input"
-              placeholder="digite aqui o nome"
-            />
-            <div class="action-icon" data-tooltip="Editar nome">✏️</div>
-            <div class="action-icon" data-tooltip="Deletar nome">🗑️</div>
-          </div>
 
-          <div class="btn-add">
-            clique aqui para adicionar mais um membro da familia
-          </div>
-          <button class="btn-concluir">concluir</button>
+          <h2>
+            1. Quem vai ajudar nas tarefas?
+          </h2>
+
+
+          <p>
+            Cadastre as pessoas que moram na casa
+            para organizar a divisão das tarefas.
+          </p>
+
         </div>
 
-        <!-- Lado Direito: Exemplo Estático com Hover Tooltip -->
-        <div class="exemplo-card">
-          <p><strong>Exemplos de Membros:</strong></p>
-          <p>• Maria (Mãe)</p>
-          <p>• João (Filho)</p>
-          <p>• Lucas (Irmão)</p>
-        </div>
       </div>
 
-      <!-- Seção 2: Tarefas da Casa -->
-      <h2>Escreva as tarefas de sua casa</h2>
-      <div style="margin-bottom: 20px">
-        <div class="item-input-group">
-          <input
-            type="text"
-            class="box-input"
-            value="Lavar banheiro"
-            placeholder="clique aqui e escreva uma tarefa"
-          />
-          <div class="action-icon" data-tooltip="Editar tarefa">✏️</div>
-          <div class="action-icon" data-tooltip="Deletar tarefa">🗑️</div>
-        </div>
 
-        <div class="btn-add">clique aqui e escreva mais uma tarefa</div>
-        <button class="btn-concluir">concluir</button>
-      </div>
+      <div class="conteudo-pessoas">
 
-      <!-- Painel Marquee / Letreiro Digital -->
-      <div class="painel-container">
-        <div class="painel-legenda">
-          Aqui estão alguns exemplos de tarefas domésticas:
-        </div>
-        <div class="marquee-wrapper">
-          <div class="marquee-content">
-            Lavar banheiro ⚫ Lavar louça ⚫ Alimentar animais ⚫ Varrer casa ⚫
-            Arrumar cama ⚫ Dobrar Roupas ⚫ Tirar o lixo ⚫ Limpar fogão ⚫ Tirar
-            pó ⚫ Limpar quintal ⚫ Limpar geladeira ⚫ Lavar banheiro ⚫ Lavar
-            louça ⚫ Alimentar animais ⚫ Varrer casa ⚫ Arrumar cama ⚫ Dobrar
-            Roupas ⚫ Tirar o lixo ⚫ Limpar fogão ⚫ Tirar pó ⚫ Limpar quintal ⚫
-            Limpar geladeira ⚫
+        <!-- CARD PRINCIPAL -->
+
+        <div class="card-etapa">
+
+          <div class="card-titulo">
+
+            <div class="icone-titulo">
+
+              <i class="fa-solid fa-users"></i>
+
+            </div>
+
+            <h3>
+              Pessoas da casa
+            </h3>
+
           </div>
+
+
+          <div class="form-adicionar">
+
+            <input type="text" id="nomePessoa" placeholder="Nome da pessoa" onkeydown="
+                                if(event.key === 'Enter')
+                                adicionarPessoa()
+                            ">
+
+            <button type="button" onclick="adicionarPessoa()" class="btn-principal">
+
+              <i class="fa-solid fa-plus"></i>
+
+              Adicionar pessoa
+
+            </button>
+
+          </div>
+
+
+          <div class="lista-titulo">
+
+            <strong>
+              Pessoas cadastradas
+            </strong>
+
+            <button type="button" onclick="resetarPessoas()" class="btn-limpar">
+
+              <i class="fa-solid fa-trash"></i>
+
+              Limpar lista
+
+            </button>
+
+          </div>
+
+
+          <ul id="listaPessoas" class="lista-pessoas">
+          </ul>
+
+
+          <div class="acoes-etapa">
+
+            <button type="button" onclick="irParaBloco2()" class="btn-principal">
+
+              Avançar para tarefas
+
+              <i class="fa-solid fa-arrow-right"></i>
+
+            </button>
+
+          </div>
+
         </div>
+
+
+        <!-- CARD DECORATIVO -->
+
+        <div class="card-decorativo">
+
+          <div class="mensagem-decorativa">
+
+            <strong>
+              Cada pessoa
+              <br>
+              faz sua parte!
+            </strong>
+
+            <i class="fa-regular fa-heart"></i>
+
+          </div>
+
+
+          <div class="folhagem">
+            🌿
+          </div>
+
+        </div>
+
       </div>
 
-      <!-- Seção 3: Frequência (Simulação Visual do Passo a Passo) -->
-      <h2>Com qual frequência gostaria que as atividades fossem realizadas?</h2>
-      <div class="frequencia-box">
-        <p><strong>Tarefa atual:</strong> Lavar banheiro</p>
+    </section>
 
-        <div class="options-group">
-          <label><input type="radio" name="freq" checked /> Todo dia</label>
-          <label><input type="radio" name="freq" /> 3 vezes por semana</label>
-          <label><input type="radio" name="freq" /> 2 vezes por semana</label>
-          <label><input type="radio" name="freq" /> 1 vez por semana</label>
+
+    <!-- =================================================
+             BLOCO 2
+             CADASTRO DAS TAREFAS
+             ================================================= -->
+
+    <section id="bloco2" class="etapa-container" style="display: none;">
+
+      <div class="cabecalho-etapa">
+
+        <div>
+
+          <div class="breadcrumb">
+
+            <i class="fa-solid fa-house"></i>
+
+            <span>Tarefas</span>
+
+          </div>
+
+
+          <h2>
+            2. Quais tarefas precisam ser feitas?
+          </h2>
+
+
+          <p>
+            Adicione as tarefas da casa e defina
+            a frequência de cada uma.
+          </p>
+
         </div>
 
-        <button class="btn-concluir" style="width: auto; padding: 10px 25px">
-          Próximo
+
+        <button type="button" onclick="voltarParaPessoas()" class="btn-voltar">
+
+          <i class="fa-solid fa-arrow-left"></i>
+
+          Voltar
+
         </button>
+
       </div>
 
-      <!-- Seção 4: Tabela de Divisão -->
-      <h2>Aqui esta uma tabela de divisão das tarefas domésticas!</h2>
-      <div class="tabela-wrapper" tabindex="0" aria-label="Tabela de tarefas: deslize lateralmente para ver todos os dias">
-      <table class="tabela-tarefas">
-        <thead>
-          <tr>
-            <th>Responsável</th>
-            <th>Segunda</th>
-            <th>Terça</th>
-            <th>Quarta</th>
-            <th>Quinta</th>
-            <th>Sexta</th>
-            <th>Sábado</th>
-            <th>Domingo</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Carlos</strong></td>
-            <td>Lavar louça</td>
-            <td>—</td>
-            <td>Varrer casa</td>
-            <td>—</td>
-            <td>Lavar louça</td>
-            <td>—</td>
-            <td>Tirar o lixo</td>
-          </tr>
-          <tr>
-            <td><strong>Maria</strong></td>
-            <td>—</td>
-            <td>Lavar banheiro</td>
-            <td>—</td>
-            <td>Arrumar cama</td>
-            <td>—</td>
-            <td>Limpar fogão</td>
-            <td>—</td>
-          </tr>
-        </tbody>
-      </table>
-      </div><br>
-      <p><b>Clique Aqui</b> para baixar sua tabela em PDF para que você possa depois imprimir e deixar na geladeira</p>
-    </main>
-  </body>
+
+      <div class="conteudo-tarefas">
+
+
+        <!-- =========================================
+                     NOVA TAREFA
+                     ========================================= -->
+
+        <div class="card-etapa card-nova-tarefa">
+
+          <div class="card-titulo">
+
+            <div class="icone-titulo">
+
+              <i class="fa-solid fa-users"></i>
+
+            </div>
+
+            <h3>
+              Nova tarefa
+            </h3>
+
+          </div>
+
+
+          <div class="campo">
+
+            <label for="nomeTarefa">
+              Nome da tarefa
+            </label>
+
+            <input type="text" id="nomeTarefa" placeholder="Ex.: Lavar louça" onkeydown="
+                                if(event.key === 'Enter')
+                                document.getElementById('freqTarefa').focus()
+                            ">
+
+          </div>
+
+
+          <div class="campo">
+
+            <label for="freqTarefa">
+              Vezes por semana
+            </label>
+
+            <input type="number" id="freqTarefa" min="1" max="7" placeholder="1" onkeydown="
+                                if(event.key === 'Enter')
+                                adicionarTarefa()
+                            ">
+
+            <small>
+              Escolha um número de 1 a 7.
+            </small>
+
+          </div>
+
+
+          <button type="button" onclick="adicionarTarefa()" class="btn-principal">
+
+            <i class="fa-solid fa-plus"></i>
+
+            Salvar tarefa
+
+          </button>
+
+        </div>
+
+
+        <!-- =========================================
+                     TAREFAS CADASTRADAS
+                     ========================================= -->
+
+        <div class="card-etapa">
+
+          <div class="card-titulo">
+
+            <div class="icone-titulo">
+
+              <i class="fa-solid fa-list-check"></i>
+
+            </div>
+
+            <h3>
+              Tarefas cadastradas
+            </h3>
+
+          </div>
+
+
+          <div class="lista-titulo">
+
+            <strong>
+              Lista de tarefas
+            </strong>
+
+            <button type="button" onclick="resetarTarefas()" class="btn-limpar">
+
+              <i class="fa-solid fa-trash"></i>
+
+              Limpar lista
+
+            </button>
+
+          </div>
+
+
+          <ul id="listaTarefas" class="lista-tarefas">
+          </ul>
+
+
+          <div class="acoes-etapa">
+
+            <button type="button" onclick="gerarTabela()" class="btn-principal">
+
+              Gerar tabela semanal
+
+              <i class="fa-solid fa-calendar-days"></i>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================
+             BLOCO FINAL
+             ESCALA SEMANAL
+             ================================================= -->
+
+    <section id="blocoFinal" class="bloco-final" style="display: none;">
+
+      <!-- CABEÇALHO -->
+
+      <div class="cabecalho-tarefas">
+
+        <div>
+
+          <div class="breadcrumb">
+
+            <i class="fa-solid fa-house"></i>
+
+            <span>Tarefas</span>
+
+          </div>
+
+
+          <h2>
+            3. Como ficou a divisão das tarefas?
+          </h2>
+
+
+          <p>
+            Confira a organização semanal das tarefas
+            para cada pessoa.
+          </p>
+
+          <button type="button" class="btn-imprimir" onclick="imprimirTabela()">
+            <i class="fa-solid fa-print"></i>
+            Imprimir tabela
+          </button>
+
+        </div>
+
+
+        <button type="button" onclick="voltarParaTarefas()" class="btn-voltar">
+
+          <i class="fa-solid fa-arrow-left"></i>
+
+          Voltar
+
+        </button>
+
+      </div>
+
+
+      <!-- CARD DA TABELA -->
+
+      <div class="tabela-container">
+
+        <div class="tabela-header">
+
+          <div>
+
+            <i class="fa-solid fa-calendar-days"></i>
+
+            <strong>
+              Escala semanal
+            </strong>
+
+          </div>
+
+        </div>
+
+        <div class="info-impressao">
+
+          <div class="campo-impressao">
+            <strong>Semana:</strong>
+            <span id="semanaImpressao"></span>
+          </div>
+
+          <div class="campo-impressao">
+            <strong>Responsável:</strong>
+            <span class="linha-preenchimento">
+              ______________________________________
+            </span>
+          </div>
+
+        </div>
+
+        <div class="tabela-scroll">
+
+          <table id="tabelaEscala">
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Pessoas / Dias
+                </th>
+
+                <th>
+                  Segunda
+                </th>
+
+                <th>
+                  Terça
+                </th>
+
+                <th>
+                  Quarta
+                </th>
+
+                <th>
+                  Quinta
+                </th>
+
+                <th>
+                  Sexta
+                </th>
+
+                <th>
+                  Sábado
+                </th>
+
+                <th>
+                  Domingo
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody id="corpoTabela">
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+      <div class="observacoes-impressao">
+
+        <strong>Observações:</strong>
+
+        <span>
+          ________________________________________________________________
+        </span>
+
+        <span>
+          ________________________________________________________________
+        </span>
+
+      </div>
+
+      <div class="conferencia-impressao">
+
+        <div>
+          Responsável pela conferência:
+          __________________________________
+        </div>
+
+        <div>
+          Data:
+          ____/____/________
+        </div>
+
+      </div>
+
+      <!-- DICA -->
+
+      <div class="dica-tarefas">
+
+        <i class="fa-solid fa-lightbulb"></i>
+
+        <div>
+
+          <strong>
+            Dica
+          </strong>
+
+          <p>
+            Você pode arrastar uma tarefa para outro
+            dia ou para outra pessoa. Se uma mesma
+            tarefa aparecer para duas pessoas no mesmo
+            dia, ela será destacada.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- BOTÃO RECOMEÇAR -->
+
+      <div class="acoes-final">
+
+        <button type="button" onclick="reiniciar()" class="btn-reiniciar">
+
+          <i class="fa-solid fa-rotate-left"></i>
+
+          Recomeçar
+
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+
+  <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+  <script>
+
+    /* =================================================
+       DADOS DO SISTEMA
+       ================================================= */
+
+    const pessoas = [];
+
+    const tarefas = [];
+
+
+    const diasSemana = [
+
+      "Segunda",
+      "Terça",
+      "Quarta",
+      "Quinta",
+      "Sexta",
+      "Sábado",
+      "Domingo"
+
+    ];
+
+
+    /* Elemento que está sendo arrastado */
+
+    let itemArrastado = null;
+
+
+
+    /* =================================================
+       BLOCO 1 - PESSOAS
+       ================================================= */
+
+
+    function adicionarPessoa() {
+
+      const input =
+        document.getElementById("nomePessoa");
+
+      const nome =
+        input.value.trim();
+
+
+      if (!nome) {
+
+        alert(
+          "Digite o nome da pessoa!"
+        );
+
+        return;
+      }
+
+
+      pessoas.push(nome);
+
+
+      input.value = "";
+
+
+      atualizarListaPessoas();
+
+      input.focus();
+
+    }
+
+
+
+    function atualizarListaPessoas() {
+      const ul = document.getElementById("listaPessoas");
+
+      ul.innerHTML = pessoas
+        .map(
+          (pessoa, index) => `
+                <li class="item-pessoa">
+                    <div class="pessoa-info">
+                        <div class="avatar-pessoa">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+
+                        <strong id="nome-pessoa-${index}">
+                            ${pessoa}
+                        </strong>
+
+                        <input
+                            type="text"
+                            id="input-pessoa-${index}"
+                            value="${pessoa}"
+                            style="display: none;"
+                        >
+                    </div>
+
+                    <div class="acoes-item">
+                        <button
+                            type="button"
+                            onclick="editarPessoa(${index})"
+                            title="Editar pessoa"
+                        >
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            onclick="salvarPessoa(${index})"
+                            title="Salvar alteração"
+                            id="salvar-${index}"
+                            style="display: none;"
+                        >
+                            <i class="fa-solid fa-check"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            onclick="cancelarEdicao(${index})"
+                            title="Cancelar"
+                            id="cancelar-${index}"
+                            style="display: none;"
+                        >
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            onclick="excluirPessoa(${index})"
+                            title="Excluir pessoa"
+                        >
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </li>
+            `
+        )
+        .join("");
+    }
+
+    function editarPessoa(index) {
+      const nome = document.getElementById(`nome-pessoa-${index}`);
+      const input = document.getElementById(`input-pessoa-${index}`);
+
+      const botaoEditar = document.querySelector(
+        `button[onclick="editarPessoa(${index})"]`
+      );
+
+      const botaoSalvar = document.getElementById(`salvar-${index}`);
+      const botaoCancelar = document.getElementById(`cancelar-${index}`);
+
+      nome.style.display = "none";
+      input.style.display = "block";
+
+      botaoEditar.style.display = "none";
+      botaoSalvar.style.display = "inline-block";
+      botaoCancelar.style.display = "inline-block";
+
+      input.focus();
+      input.select();
+    }
+
+    function salvarPessoa(index) {
+      const input = document.getElementById(`input-pessoa-${index}`);
+
+      const novoNome = input.value.trim();
+
+      if (novoNome === "") {
+        alert("O nome não pode ficar vazio!");
+        input.focus();
+        return;
+      }
+
+      pessoas[index] = novoNome;
+
+      atualizarListaPessoas();
+    }
+
+    function cancelarEdicao(index) {
+      atualizarListaPessoas();
+    }
+
+    function excluirPessoa(index) {
+
+      pessoas.splice(index, 1);
+
+      atualizarListaPessoas();
+
+    }
+
+
+
+    function resetarPessoas() {
+
+      if (pessoas.length === 0) {
+
+        return;
+
+      }
+
+
+      const confirmar = confirm(
+        "Tem certeza que deseja apagar todos os nomes da lista?"
+      );
+
+
+      if (confirmar) {
+
+        pessoas.length = 0;
+
+        atualizarListaPessoas();
+
+      }
+
+    }
+
+
+
+    function irParaBloco2() {
+
+      if (pessoas.length === 0) {
+
+        alert(
+          "Adicione pelo menos uma pessoa!"
+        );
+
+        return;
+
+      }
+
+
+      document.getElementById(
+        "bloco1"
+      ).style.display = "none";
+
+
+      document.getElementById(
+        "bloco2"
+      ).style.display = "block";
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+
+    function voltarParaPessoas() {
+
+      document.getElementById(
+        "bloco2"
+      ).style.display = "none";
+
+
+      document.getElementById(
+        "bloco1"
+      ).style.display = "block";
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+
+    /* =================================================
+       BLOCO 2 - TAREFAS
+       ================================================= */
+
+
+    function adicionarTarefa() {
+
+      const inputNome =
+        document.getElementById("nomeTarefa");
+
+      const inputFreq =
+        document.getElementById("freqTarefa");
+
+      const nome =
+        inputNome.value.trim();
+
+      const freqVal =
+        parseInt(inputFreq.value);
+
+
+      if (!nome) {
+
+        alert("Digite o nome da tarefa!");
+
+        inputNome.focus();
+
+        return;
+      }
+
+
+      if (
+        isNaN(freqVal) ||
+        freqVal < 1 ||
+        freqVal > 7
+      ) {
+
+        alert("Digite uma frequência de 1 a 7.");
+
+        inputFreq.focus();
+
+        return;
+      }
+
+
+      tarefas.push({
+
+        nome: nome,
+
+        freq: freqVal
+
+      });
+
+
+      inputNome.value = "";
+
+      inputFreq.value = "";
+
+
+      atualizarListaTarefas();
+
+      inputNome.focus();
+    }
+
+
+
+    function atualizarListaTarefas() {
+
+      const ul =
+        document.getElementById("listaTarefas");
+
+
+      ul.innerHTML = tarefas
+        .map(
+          (tarefa, index) => `
+
+                <li class="item-tarefa">
+
+                    <div class="tarefa-info">
+
+                        <div class="icone-tarefa">
+                            <i class="fa-solid fa-list-check"></i>
+                        </div>
+
+                        <div>
+
+                            <strong id="nome-tarefa-${index}">
+                                ${tarefa.nome}
+                            </strong>
+
+                            <input
+                                type="text"
+                                id="input-nome-tarefa-${index}"
+                                value="${tarefa.nome}"
+                                style="display: none;"
+                            >
+
+
+                            <small id="freq-tarefa-${index}">
+                                ${tarefa.freq}
+                                ${tarefa.freq === 1
+              ? "vez por semana"
+              : "vezes por semana"
+            }
+                            </small>
+
+                            <input
+                                type="number"
+                                id="input-freq-tarefa-${index}"
+                                value="${tarefa.freq}"
+                                min="1"
+                                max="7"
+                                style="display: none;"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="acoes-item">
+
+                        <button
+                            type="button"
+                            onclick="editarTarefa(${index})"
+                            title="Editar tarefa"
+                            id="editar-tarefa-${index}"
+                        >
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+
+
+                        <button
+                            type="button"
+                            onclick="salvarTarefa(${index})"
+                            title="Salvar alteração"
+                            id="salvar-tarefa-${index}"
+                            style="display: none;"
+                        >
+                            <i class="fa-solid fa-check"></i>
+                        </button>
+
+
+                        <button
+                            type="button"
+                            onclick="cancelarEdicaoTarefa(${index})"
+                            title="Cancelar"
+                            id="cancelar-tarefa-${index}"
+                            style="display: none;"
+                        >
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+
+
+                        <button
+                            type="button"
+                            onclick="excluirTarefa(${index})"
+                            title="Excluir tarefa"
+                        >
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+
+                    </div>
+
+                </li>
+
+            `
+        )
+        .join("");
+    }
+
+
+
+    function editarTarefa(index) {
+
+      const nome =
+        document.getElementById(`nome-tarefa-${index}`);
+
+      const inputNome =
+        document.getElementById(`input-nome-tarefa-${index}`);
+
+      const freq =
+        document.getElementById(`freq-tarefa-${index}`);
+
+      const inputFreq =
+        document.getElementById(`input-freq-tarefa-${index}`);
+
+      const botaoEditar =
+        document.getElementById(`editar-tarefa-${index}`);
+
+      const botaoSalvar =
+        document.getElementById(`salvar-tarefa-${index}`);
+
+      const botaoCancelar =
+        document.getElementById(`cancelar-tarefa-${index}`);
+
+
+      nome.style.display = "none";
+
+      freq.style.display = "none";
+
+
+      inputNome.style.display = "block";
+
+      inputFreq.style.display = "block";
+
+
+      botaoEditar.style.display = "none";
+
+      botaoSalvar.style.display = "inline-block";
+
+      botaoCancelar.style.display = "inline-block";
+
+
+      inputNome.focus();
+
+      inputNome.select();
+    }
+
+
+
+    function salvarTarefa(index) {
+
+      const inputNome =
+        document.getElementById(`input-nome-tarefa-${index}`);
+
+      const inputFreq =
+        document.getElementById(`input-freq-tarefa-${index}`);
+
+
+      const novoNome =
+        inputNome.value.trim();
+
+      const novaFreq =
+        parseInt(inputFreq.value);
+
+
+      if (!novoNome) {
+
+        alert("Digite o nome da tarefa!");
+
+        inputNome.focus();
+
+        return;
+      }
+
+
+      if (
+        isNaN(novaFreq) ||
+        novaFreq < 1 ||
+        novaFreq > 7
+      ) {
+
+        alert("Digite uma frequência de 1 a 7.");
+
+        inputFreq.focus();
+
+        return;
+      }
+
+
+      tarefas[index] = {
+
+        nome: novoNome,
+
+        freq: novaFreq
+
+      };
+
+
+      atualizarListaTarefas();
+    }
+
+
+
+    function cancelarEdicaoTarefa(index) {
+
+      atualizarListaTarefas();
+
+    }
+
+
+
+    function excluirTarefa(index) {
+
+      tarefas.splice(index, 1);
+
+      atualizarListaTarefas();
+
+    }
+
+
+
+    function resetarTarefas() {
+
+      if (tarefas.length === 0) {
+
+        return;
+
+      }
+
+
+      const confirmar = confirm(
+        "Tem certeza que deseja apagar todas as tarefas da lista?"
+      );
+
+
+      if (confirmar) {
+
+        tarefas.length = 0;
+
+        atualizarListaTarefas();
+
+      }
+
+    }
+
+
+
+    /* =================================================
+       GERAÇÃO DA TABELA
+       ================================================= */
+
+
+    function gerarTabela() {
+
+      if (tarefas.length === 0) {
+
+        alert(
+          "Adicione pelo menos uma tarefa!"
+        );
+
+        return;
+
+      }
+
+
+      /*
+          matrizResultados[pessoa][dia]
+          contém as tarefas daquela pessoa
+          naquele dia.
+      */
+
+      const matrizResultados =
+        pessoas.map(
+          () =>
+            diasSemana.map(
+              () => []
+            )
+        );
+
+
+      /*
+          Quantidade total de tarefas
+          atribuídas a cada pessoa.
+      */
+
+      const totalTarefasPessoa =
+        pessoas.map(
+          () => 0
+        );
+
+
+      /* =============================================
+         DISTRIBUIÇÃO DAS TAREFAS
+         ============================================= */
+
+
+      tarefas.forEach(
+        (objTarefa) => {
+
+          const tarefaNome =
+            objTarefa.nome;
+
+
+          const freq =
+            objTarefa.freq;
+
+
+          /*
+              Calcula os dias em que
+              a tarefa será realizada.
+          */
+
+          const diasSelecionados =
+            calcularDiasEspacados(freq);
+
+
+          diasSelecionados.forEach(
+            (diaIndex) => {
+
+
+              let melhorPessoaIndex = 0;
+
+              let menorCargaNoDia =
+                Infinity;
+
+              let menorCargaNaSemana =
+                Infinity;
+
+
+              /*
+                  Procuramos a pessoa
+                  com menor carga.
+              */
+
+              pessoas.forEach(
+                (_, pIndex) => {
+
+
+                  const cargaNoDia =
+                    matrizResultados[
+                      pIndex
+                    ][
+                      diaIndex
+                    ].length;
+
+
+                  const cargaNaSemana =
+                    totalTarefasPessoa[
+                    pIndex
+                    ];
+
+
+                  /*
+                      Primeiro critério:
+                      menor carga no dia.
+                  */
+
+                  if (
+                    cargaNoDia <
+                    menorCargaNoDia
+                  ) {
+
+                    menorCargaNoDia =
+                      cargaNoDia;
+
+                    menorCargaNaSemana =
+                      cargaNaSemana;
+
+                    melhorPessoaIndex =
+                      pIndex;
+
+                  }
+
+
+                  /*
+                      Segundo critério:
+                      menor carga semanal.
+                  */
+
+                  else if (
+                    cargaNoDia ===
+                    menorCargaNoDia
+                  ) {
+
+                    if (
+                      cargaNaSemana <
+                      menorCargaNaSemana
+                    ) {
+
+                      menorCargaNaSemana =
+                        cargaNaSemana;
+
+                      melhorPessoaIndex =
+                        pIndex;
+
+                    }
+
+                  }
+
+                }
+              );
+
+
+              /*
+                  Atribui a tarefa.
+              */
+
+              matrizResultados[
+                melhorPessoaIndex
+              ][
+                diaIndex
+              ].push(
+                tarefaNome
+              );
+
+
+              totalTarefasPessoa[
+                melhorPessoaIndex
+              ]++;
+
+            }
+          );
+
+        }
+      );
+
+
+
+      /* =============================================
+         RENDERIZAÇÃO DA TABELA
+         ============================================= */
+
+
+      const corpoTabela =
+        document.getElementById(
+          "corpoTabela"
+        );
+
+
+      corpoTabela.innerHTML = "";
+
+
+      pessoas.forEach(
+        (pessoa, pIndex) => {
+
+
+          const tr =
+            document.createElement(
+              "tr"
+            );
+
+
+          let htmlLinha = `
+
+                        <td class="nome-pessoa-tabela">
+
+                            <div class="pessoa-tabela">
+
+                                <div class="avatar-pessoa">
+                                    <i class="fa-solid fa-user"></i>
+                                </div>
+
+                                <strong>
+                                    ${pessoa}
+                                </strong>
+
+                            </div>
+
+                        </td>
+
+                    `;
+
+
+          diasSemana.forEach(
+            (_, dIndex) => {
+
+              htmlLinha += `
+
+                                <td
+                                    class="drop-zone"
+                                    data-dia="${dIndex}"
+                                    data-pessoa="${pIndex}"
+                                >
+                                </td>
+
+                            `;
+
+            }
+          );
+
+
+          tr.innerHTML =
+            htmlLinha;
+
+
+          corpoTabela.appendChild(
+            tr
+          );
+
+        }
+      );
+
+
+
+      /* =============================================
+         INSERIR TAREFAS
+         ============================================= */
+
+
+      pessoas.forEach(
+        (_, pIndex) => {
+
+          diasSemana.forEach(
+            (_, dIndex) => {
+
+
+              const celula =
+                corpoTabela.querySelector(
+                  `td[data-pessoa="${pIndex}"][data-dia="${dIndex}"]`
+                );
+
+
+              const listaTarefasDoDia =
+                matrizResultados[
+                pIndex
+                ][
+                dIndex
+                ];
+
+
+              listaTarefasDoDia.forEach(
+                (nomeTarefa) => {
+
+                  const card =
+                    criarCardTarefa(
+                      nomeTarefa
+                    );
+
+
+                  celula.appendChild(
+                    card
+                  );
+
+                }
+              );
+
+            }
+          );
+
+        }
+      );
+
+
+
+      /* Configura arrastar e soltar */
+
+      configurarDragAndDrop();
+
+
+      /* Verifica duplicidades */
+
+      atualizarVerificacoesDuplicidade();
+
+      definirSemanaImpressao();
+
+      /* Esconde etapa 2 */
+
+      document.getElementById(
+        "bloco2"
+      ).style.display = "none";
+
+
+      /* Mostra resultado */
+
+      document.getElementById(
+        "blocoFinal"
+      ).style.display = "block";
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+    function criarTabelaParaImpressao() {
+
+      const linhas = [];
+
+      pessoas.forEach(
+        (pessoa, pIndex) => {
+
+          let linha = `
+                <tr>
+
+                    <td>
+                        <span class="nome-pessoa">
+                            ${pessoa}
+                        </span>
+                    </td>
+            `;
+
+
+          diasSemana.forEach(
+            (_, dIndex) => {
+
+              const celula =
+                document.querySelector(
+                  `#corpoTabela td[data-pessoa="${pIndex}"][data-dia="${dIndex}"]`
+                );
+
+
+              let tarefasHtml = "";
+
+
+              if (celula) {
+
+                const cards =
+                  celula.querySelectorAll(
+                    ".tarefa-card"
+                  );
+
+
+                cards.forEach(
+                  (card) => {
+
+                    const titulo =
+                      card.querySelector(
+                        ".titulo-tarefa"
+                      );
+
+
+                    if (titulo) {
+
+                      tarefasHtml += `
+                                        <span class="tarefa">
+                                            ${titulo.innerText}
+                                        </span>
+                                    `;
+
+                    }
+
+                  }
+                );
+
+              }
+
+
+              linha += `
+                        <td>
+                            ${tarefasHtml}
+                        </td>
+                    `;
+
+            }
+          );
+
+
+          linha += `
+                </tr>
+            `;
+
+
+          linhas.push(linha);
+
+        }
+      );
+
+
+      return linhas.join("");
+
+    }
+
+
+
+    /* =================================================
+       CRIAÇÃO DO CARD DE TAREFA
+       ================================================= */
+
+
+    function criarCardTarefa(nomeTarefa) {
+
+      const card =
+        document.createElement("div");
+
+
+      card.className =
+        "tarefa-card";
+
+
+      card.draggable =
+        true;
+
+
+      card.dataset.tarefa =
+        nomeTarefa;
+
+
+      card.innerHTML = `
+
+                <span class="titulo-tarefa">
+                    ${nomeTarefa}
+                </span>
+
+                <span
+                    class="alerta-duplicada"
+                    style="display: none;"
+                ></span>
+
+            `;
+
+
+
+      /*
+          Quando começa a arrastar.
+      */
+
+      card.addEventListener(
+        "dragstart",
+        (event) => {
+
+          itemArrastado =
+            card;
+
+
+          event.dataTransfer.setData(
+            "text/plain",
+            nomeTarefa
+          );
+
+
+          card.classList.add(
+            "arrastando"
+          );
+
+        }
+      );
+
+
+
+      /*
+          Quando termina de arrastar.
+      */
+
+      card.addEventListener(
+        "dragend",
+        () => {
+
+          itemArrastado =
+            null;
+
+
+          card.classList.remove(
+            "arrastando"
+          );
+
+        }
+      );
+
+
+      return card;
+
+    }
+
+
+
+    /* =================================================
+       DRAG AND DROP
+       ================================================= */
+
+
+    function configurarDragAndDrop() {
+
+      const celulas =
+        document.querySelectorAll(
+          ".drop-zone"
+        );
+
+
+      celulas.forEach(
+        (celula) => {
+
+
+          celula.addEventListener(
+            "dragover",
+            (event) => {
+
+              event.preventDefault();
+
+              celula.classList.add(
+                "drag-over"
+              );
+
+            }
+          );
+
+
+          celula.addEventListener(
+            "dragleave",
+            () => {
+
+              celula.classList.remove(
+                "drag-over"
+              );
+
+            }
+          );
+
+
+          celula.addEventListener(
+            "drop",
+            (event) => {
+
+              event.preventDefault();
+
+
+              celula.classList.remove(
+                "drag-over"
+              );
+
+
+              if (
+                itemArrastado
+              ) {
+
+                celula.appendChild(
+                  itemArrastado
+                );
+
+
+                atualizarVerificacoesDuplicidade();
+
+              }
+
+            }
+          );
+
+        }
+      );
+
+    }
+
+
+
+    /* =================================================
+       VERIFICAÇÃO DE DUPLICIDADE
+       ================================================= */
+
+
+    function atualizarVerificacoesDuplicidade() {
+
+      diasSemana.forEach(
+        (diaNome, dIndex) => {
+
+
+          const celulasDoDia =
+            document.querySelectorAll(
+              `td[data-dia="${dIndex}"]`
+            );
+
+
+          const contagemTarefas = {};
+
+
+
+          /*
+              Conta quantas vezes
+              cada tarefa aparece
+              naquele dia.
+          */
+
+          celulasDoDia.forEach(
+            (celula) => {
+
+
+              const cards =
+                celula.querySelectorAll(
+                  ".tarefa-card"
+                );
+
+
+              cards.forEach(
+                (card) => {
+
+
+                  const nome =
+                    card.dataset.tarefa;
+
+
+                  contagemTarefas[nome] =
+                    (
+                      contagemTarefas[nome]
+                      || 0
+                    ) + 1;
+
+                }
+              );
+
+            }
+          );
+
+
+
+          /*
+              Aplica o destaque.
+          */
+
+          celulasDoDia.forEach(
+            (celula) => {
+
+
+              const cards =
+                celula.querySelectorAll(
+                  ".tarefa-card"
+                );
+
+
+              cards.forEach(
+                (card) => {
+
+
+                  const nome =
+                    card.dataset.tarefa;
+
+
+                  const alerta =
+                    card.querySelector(
+                      ".alerta-duplicada"
+                    );
+
+
+                  if (
+                    contagemTarefas[
+                    nome
+                    ] > 1
+                  ) {
+
+                    card.classList.add(
+                      "duplicada"
+                    );
+
+
+                    alerta.textContent =
+                      `⚠ Já atribuído na ${diaNome}`;
+
+
+                    alerta.style.display =
+                      "block";
+
+                  }
+
+                  else {
+
+                    card.classList.remove(
+                      "duplicada"
+                    );
+
+
+                    alerta.style.display =
+                      "none";
+
+                  }
+
+                }
+              );
+
+            }
+          );
+
+        }
+      );
+
+    }
+
+
+
+    /* =================================================
+       DISTRIBUIÇÃO DOS DIAS
+       ================================================= */
+
+
+    function calcularDiasEspacados(freq) {
+
+      const dias = [];
+
+
+      const passo =
+        7 / freq;
+
+
+      for (
+        let i = 0;
+        i < freq;
+        i++
+      ) {
+
+        const diaIndex =
+          Math.floor(
+            i * passo
+          );
+
+
+        dias.push(
+          diaIndex
+        );
+
+      }
+
+
+      return dias;
+
+    }
+
+
+
+    /* =================================================
+       VOLTAR PARA A LISTA DE TAREFAS
+       ================================================= */
+
+
+    function voltarParaTarefas() {
+
+      document.getElementById(
+        "blocoFinal"
+      ).style.display = "none";
+
+
+      document.getElementById(
+        "bloco2"
+      ).style.display = "block";
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+
+    /* =================================================
+       REINICIAR TODO O SISTEMA
+       ================================================= */
+
+
+    function reiniciar() {
+
+      const confirmar =
+        confirm(
+          "Deseja realmente recomeçar? Todas as pessoas e tarefas serão apagadas."
+        );
+
+
+      if (!confirmar) {
+
+        return;
+
+      }
+
+
+      pessoas.length = 0;
+
+      tarefas.length = 0;
+
+
+      atualizarListaPessoas();
+
+      atualizarListaTarefas();
+
+
+      document.getElementById(
+        "blocoFinal"
+      ).style.display = "none";
+
+
+      document.getElementById(
+        "bloco2"
+      ).style.display = "none";
+
+
+      document.getElementById(
+        "bloco1"
+      ).style.display = "block";
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+    function imprimirTabela() {
+      window.print();
+    }
+
+    function definirSemanaImpressao() {
+      const hoje = new Date();
+
+      const primeiroDia = new Date(hoje);
+      const ultimoDia = new Date(hoje);
+
+      const diaSemana = hoje.getDay();
+
+      const diferencaSegunda =
+        diaSemana === 0 ? -6 : 1 - diaSemana;
+
+      primeiroDia.setDate(
+        hoje.getDate() + diferencaSegunda
+      );
+
+      ultimoDia.setDate(
+        primeiroDia.getDate() + 6
+      );
+
+      const formatarData = (data) => {
+        return data.toLocaleDateString("pt-BR");
+      };
+
+      document.getElementById("semanaImpressao").textContent =
+        `${formatarData(primeiroDia)} até ${formatarData(ultimoDia)}`;
+    }
+
+  </script>
+
+</body>
+
 </html>
