@@ -1,0 +1,1434 @@
+/* =====================================================
+   POR TRÁS DA CASA
+   DIVISOR DE TAREFAS
+   ===================================================== */
+
+
+/* =====================================================
+   ESTRUTURA PRINCIPAL
+   ===================================================== */
+
+.divisor-main {
+    min-height: calc(100vh - 90px);
+    background-color: #FDF4E3;
+}
+
+
+/* =====================================================
+   ETAPAS 1 E 2
+   ===================================================== */
+
+.etapa-container {
+
+    min-height: calc(100vh - 90px);
+
+    padding:
+        45px
+        clamp(20px, 5vw, 60px)
+        60px;
+
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+}
+
+
+/* =====================================================
+   CABEÇALHO
+   ===================================================== */
+
+.cabecalho-etapa {
+
+    max-width: 1250px;
+
+    margin:
+        0 auto 25px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 30px;
+
+}
+
+
+.breadcrumb {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 8px;
+
+    color: #ED820E;
+
+    font-size: 1rem;
+
+    font-weight: bold;
+
+}
+
+
+.breadcrumb i {
+
+    font-size: 1rem;
+
+}
+
+
+.cabecalho-etapa h2 {
+
+    color: #35231B;
+
+    font-size:
+        clamp(1.8rem, 4vw, 2.5rem);
+
+    line-height: 1.2;
+
+    margin-bottom: 8px;
+
+}
+
+
+.cabecalho-etapa p {
+
+    color: #444444;
+
+    font-size: 1.05rem;
+
+}
+
+
+/* =====================================================
+   CONTEÚDO DA PRIMEIRA ETAPA
+   ===================================================== */
+
+.conteudo-pessoas {
+
+    max-width: 1250px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        280px;
+
+    gap: 20px;
+
+}
+
+
+/* =====================================================
+   CONTEÚDO DA SEGUNDA ETAPA
+   ===================================================== */
+
+.conteudo-tarefas {
+
+    max-width: 1250px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(300px, 0.8fr)
+        minmax(400px, 1.2fr);
+
+    gap: 20px;
+
+}
+
+
+/* =====================================================
+   CARDS
+   ===================================================== */
+
+.card-etapa {
+
+    background-color: #FFF9F0;
+
+    border:
+        1px solid
+        #E8D9C4;
+
+    border-radius: 16px;
+
+    padding: 24px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(0, 0, 0, 0.06);
+
+}
+
+
+/* =====================================================
+   TÍTULO DOS CARDS
+   ===================================================== */
+
+.card-titulo {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.card-titulo h3 {
+
+    color: #35231B;
+
+    font-size: 1.2rem;
+
+}
+
+
+.icone-titulo {
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 50%;
+
+    background-color: #ED820E;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.icone-titulo i {
+
+    font-size: 1rem;
+
+}
+
+
+/* =====================================================
+   FORMULÁRIO
+   ===================================================== */
+
+.form-adicionar {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.form-adicionar input {
+
+    flex: 1;
+
+}
+
+
+input {
+
+    font-family: inherit;
+
+    background-color: #FFFDF9;
+
+    border:
+        1px solid
+        #DCCDBB;
+
+    border-radius: 9px;
+
+    padding:
+        12px 14px;
+
+    color: #35231B;
+
+    font-size: 0.95rem;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+input:focus {
+
+    border-color: #ED820E;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(237, 130, 14, 0.12);
+
+}
+
+
+input::placeholder {
+
+    color: #999999;
+
+}
+
+
+/* =====================================================
+   BOTÃO PRINCIPAL
+   ===================================================== */
+
+.btn-principal {
+
+    border: none;
+
+    background-color: #ED820E;
+
+    color: white;
+
+    padding:
+        11px 18px;
+
+    border-radius: 9px;
+
+    font-family: inherit;
+
+    font-size: 0.95rem;
+
+    font-weight: bold;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.btn-principal:hover {
+
+    background-color: #D96F08;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 5px 12px
+        rgba(0, 0, 0, 0.12);
+
+}
+
+
+/* =====================================================
+   TÍTULO DA LISTA
+   ===================================================== */
+
+.lista-titulo {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 10px;
+
+    color: #35231B;
+
+}
+
+
+.btn-limpar {
+
+    border: none;
+
+    background: transparent;
+
+    color: #ED820E;
+
+    font-family: inherit;
+
+    font-size: 0.85rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.btn-limpar:hover {
+
+    text-decoration: underline;
+
+}
+
+
+/* =====================================================
+   LISTA DE PESSOAS
+   ===================================================== */
+
+.lista-pessoas {
+
+    list-style: none;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    min-height: 30px;
+
+}
+
+
+.item-pessoa {
+
+    min-height: 55px;
+
+    background-color: #FFFDF9;
+
+    border:
+        1px solid
+        #EFE3D4;
+
+    border-radius: 10px;
+
+    padding:
+        8px 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+}
+
+
+.pessoa-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color: #35231B;
+
+}
+
+
+.avatar-pessoa {
+
+    width: 35px;
+
+    height: 35px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background-color: #FFC857;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.item-pessoa:nth-child(3n) .avatar-pessoa {
+
+    background-color: #9CAF88;
+
+}
+
+
+.item-pessoa:nth-child(4n) .avatar-pessoa {
+
+    background-color: #E88B87;
+
+}
+
+
+/* =====================================================
+   AÇÕES DOS ITENS
+   ===================================================== */
+
+.acoes-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+}
+
+
+.acoes-item button {
+
+    border: none;
+
+    background: transparent;
+
+    color: #ED820E;
+
+    width: 30px;
+
+    height: 30px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease;
+
+}
+
+
+.acoes-item button:hover {
+
+    background-color: #FFF0D4;
+
+}
+
+
+.acoes-item button:last-child {
+
+    color: #E55A42;
+
+}
+
+
+/* =====================================================
+   AÇÕES DA ETAPA
+   ===================================================== */
+
+.acoes-etapa {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    margin-top: 20px;
+
+}
+
+
+/* =====================================================
+   CARD DECORATIVO
+   ===================================================== */
+
+.card-decorativo {
+
+    min-height: 300px;
+
+    border-radius: 16px;
+
+    background-color: #F7E6D0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 35px 20px 15px;
+
+    overflow: hidden;
+
+}
+
+
+.mensagem-decorativa {
+
+    color: #ED6D2E;
+
+    font-size: 1.5rem;
+
+    line-height: 1.05;
+
+    text-align: center;
+
+    transform: rotate(-4deg);
+
+}
+
+
+.mensagem-decorativa i {
+
+    display: block;
+
+    color: #ED820E;
+
+    margin-top: 12px;
+
+    font-size: 1.8rem;
+
+}
+
+
+.folhagem {
+
+    font-size: 5rem;
+
+    transform:
+        rotate(-8deg);
+
+}
+
+
+/* =====================================================
+   CAMPOS DA TAREFA
+   ===================================================== */
+
+.campo {
+
+    margin-bottom: 18px;
+
+}
+
+
+.campo label {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #35231B;
+
+    font-weight: bold;
+
+    font-size: 0.9rem;
+
+}
+
+
+.campo input {
+
+    width: 100%;
+
+}
+
+
+.campo small {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color: #777;
+
+    font-size: 0.78rem;
+
+}
+
+
+/* =====================================================
+   LISTA DE TAREFAS
+   ===================================================== */
+
+.lista-tarefas {
+
+    list-style: none;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    min-height: 30px;
+
+}
+
+
+.item-tarefa {
+
+    min-height: 58px;
+
+    background-color: #FFFDF9;
+
+    border:
+        1px solid
+        #EFE3D4;
+
+    border-radius: 10px;
+
+    padding:
+        8px 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+}
+
+
+.tarefa-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color: #35231B;
+
+}
+
+
+.tarefa-info strong {
+
+    display: block;
+
+}
+
+
+.tarefa-info small {
+
+    display: block;
+
+    color: #777;
+
+    font-size: 0.78rem;
+
+    margin-top: 2px;
+
+}
+
+
+.icone-tarefa {
+
+    width: 35px;
+
+    height: 35px;
+
+    border-radius: 8px;
+
+    background-color: #FFF0D4;
+
+    color: #ED820E;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+/* =====================================================
+   BOTÃO VOLTAR
+   ===================================================== */
+
+.btn-voltar {
+
+    border: none;
+
+    background-color: #FFC857;
+
+    color: #35231B;
+
+    padding:
+        12px 22px;
+
+    border-radius: 12px;
+
+    font-family: inherit;
+
+    font-weight: bold;
+
+    font-size: 1rem;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.btn-voltar:hover {
+
+    background-color: #ED820E;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 5px 12px
+        rgba(0, 0, 0, 0.12);
+
+}
+
+
+/* =====================================================
+   BLOCO FINAL
+   ===================================================== */
+
+.bloco-final {
+
+    min-height:
+        calc(100vh - 90px);
+
+    padding:
+        45px
+        clamp(20px, 5vw, 60px)
+        60px;
+
+    background-color: #FDF4E3;
+
+}
+
+
+/* =====================================================
+   CABEÇALHO FINAL
+   ===================================================== */
+
+.cabecalho-tarefas {
+
+    max-width: 1250px;
+
+    margin:
+        0 auto 25px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 30px;
+
+}
+
+
+.cabecalho-tarefas h2 {
+
+    color: #35231B;
+
+    font-size:
+        clamp(1.8rem, 4vw, 2.5rem);
+
+    line-height: 1.2;
+
+    margin-bottom: 8px;
+
+}
+
+
+.cabecalho-tarefas p {
+
+    color: #444444;
+
+    font-size: 1.05rem;
+
+}
+
+
+/* =====================================================
+   CARD DA TABELA
+   ===================================================== */
+
+.tabela-container {
+
+    max-width: 1250px;
+
+    margin: 0 auto;
+
+    background-color: #FFF9F0;
+
+    border:
+        1px solid
+        #E8D9C4;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(0, 0, 0, 0.06);
+
+    overflow: hidden;
+
+}
+
+
+/* =====================================================
+   CABEÇALHO DA TABELA
+   ===================================================== */
+
+.tabela-header {
+
+    padding:
+        18px 24px;
+
+    background-color: #F7E6D0;
+
+    color: #35231B;
+
+    border-bottom:
+        1px solid
+        #E8D9C4;
+
+    font-size: 1.1rem;
+
+}
+
+
+.tabela-header div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+.tabela-header i {
+
+    color: #ED820E;
+
+    font-size: 1.2rem;
+
+}
+
+
+/* =====================================================
+   SCROLL DA TABELA
+   ===================================================== */
+
+.tabela-scroll {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+/* =====================================================
+   TABELA
+   ===================================================== */
+
+#tabelaEscala {
+
+    width: 100%;
+
+    min-width: 950px;
+
+    border-collapse: separate;
+
+    border-spacing: 8px;
+
+    padding: 12px;
+
+}
+
+
+#tabelaEscala th {
+
+    background-color: #F7E6D0;
+
+    color: #35231B;
+
+    border: none;
+
+    padding:
+        13px 10px;
+
+    border-radius: 10px;
+
+    font-size: 0.95rem;
+
+    white-space: nowrap;
+
+}
+
+
+#tabelaEscala th:first-child {
+
+    background-color: #ED820E;
+
+    color: white;
+
+}
+
+
+#tabelaEscala td {
+
+    min-width: 110px;
+
+    height: 85px;
+
+    padding: 7px;
+
+    vertical-align: top;
+
+    background-color: #FFFDF9;
+
+    border:
+        1px solid
+        #E8D9C4;
+
+    border-radius: 10px;
+
+    text-align: center;
+
+    transition:
+        background-color 0.2s ease;
+
+}
+
+
+#tabelaEscala td:first-child {
+
+    min-width: 145px;
+
+    background-color: #F7E6D0;
+
+    color: #35231B;
+
+    vertical-align: middle;
+
+    font-size: 1rem;
+
+}
+
+
+/* =====================================================
+   NOME DA PESSOA NA TABELA
+   ===================================================== */
+
+.pessoa-tabela {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    justify-content: flex-start;
+
+}
+
+
+.pessoa-tabela .avatar-pessoa {
+
+    width: 32px;
+
+    height: 32px;
+
+}
+
+
+/* =====================================================
+   DROP ZONE
+   ===================================================== */
+
+.drop-zone {
+
+    min-height: 75px;
+
+}
+
+
+.drop-zone.drag-over {
+
+    background-color: #FFF0D4 !important;
+
+    border:
+        2px dashed
+        #ED820E !important;
+
+}
+
+
+/* =====================================================
+   CARD DA TAREFA
+   ===================================================== */
+
+.tarefa-card {
+
+    background-color: #FFF0D4;
+
+    border:
+        1px solid
+        #ED820E;
+
+    color: #35231B;
+
+    border-radius: 8px;
+
+    padding:
+        8px 7px;
+
+    margin:
+        4px 0;
+
+    font-size: 0.82rem;
+
+    font-weight: bold;
+
+    cursor: grab;
+
+    user-select: none;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        opacity 0.15s ease;
+
+}
+
+
+.tarefa-card:hover {
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 3px 8px
+        rgba(0, 0, 0, 0.10);
+
+}
+
+
+.tarefa-card:active {
+
+    cursor: grabbing;
+
+}
+
+
+.tarefa-card.arrastando {
+
+    opacity: 0.45;
+
+}
+
+
+/* =====================================================
+   DUPLICIDADE
+   ===================================================== */
+
+.tarefa-card.duplicada {
+
+    background-color:
+        #FFE1DC !important;
+
+    border-color:
+        #D94A38 !important;
+
+    color:
+        #A92D20 !important;
+
+}
+
+
+.alerta-duplicada {
+
+    display: block;
+
+    margin-top: 4px;
+
+    color: #C62828;
+
+    font-size: 0.7rem;
+
+    font-weight: bold;
+
+}
+
+
+/* =====================================================
+   DICA
+   ===================================================== */
+
+.dica-tarefas {
+
+    max-width: 1250px;
+
+    margin:
+        20px auto 0;
+
+    padding:
+        18px 22px;
+
+    background-color: #FFF1D6;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 14px;
+
+    color: #5A3B25;
+
+}
+
+
+.dica-tarefas > i {
+
+    color: #ED820E;
+
+    font-size: 1.3rem;
+
+    margin-top: 2px;
+
+}
+
+
+.dica-tarefas strong {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #35231B;
+
+}
+
+
+.dica-tarefas p {
+
+    font-size: 0.95rem;
+
+}
+
+
+/* =====================================================
+   BOTÃO RECOMEÇAR
+   ===================================================== */
+
+.acoes-final {
+
+    max-width: 1250px;
+
+    margin:
+        25px auto 0;
+
+    display: flex;
+
+    justify-content: flex-end;
+
+}
+
+
+.btn-reiniciar {
+
+    border: none;
+
+    background-color: #ED820E;
+
+    color: white;
+
+    padding:
+        13px 24px;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    font-size: 1rem;
+
+    font-weight: bold;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.btn-reiniciar:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 5px 12px
+        rgba(0, 0, 0, 0.15);
+
+}
+
+
+/* =====================================================
+   RESPONSIVIDADE
+   ===================================================== */
+
+@media (max-width: 900px) {
+
+    .conteudo-pessoas {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .card-decorativo {
+
+        min-height: 220px;
+
+    }
+
+
+    .conteudo-tarefas {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .etapa-container {
+
+        padding:
+            30px 15px 40px;
+
+    }
+
+
+    .cabecalho-etapa {
+
+        flex-direction: column;
+
+    }
+
+
+    .cabecalho-tarefas {
+
+        flex-direction: column;
+
+    }
+
+
+    .cabecalho-etapa h2,
+    .cabecalho-tarefas h2 {
+
+        font-size: 1.8rem;
+
+    }
+
+
+    .form-adicionar {
+
+        flex-direction: column;
+
+    }
+
+
+    .form-adicionar .btn-principal {
+
+        width: 100%;
+
+    }
+
+
+    .card-etapa {
+
+        padding: 18px;
+
+    }
+
+
+    .btn-voltar {
+
+        align-self: flex-end;
+
+    }
+
+
+    .dica-tarefas {
+
+        padding: 15px;
+
+    }
+
+
+    .acoes-final {
+
+        justify-content: stretch;
+
+    }
+
+
+    .btn-reiniciar {
+
+        width: 100%;
+
+        justify-content: center;
+
+    }
+
+}

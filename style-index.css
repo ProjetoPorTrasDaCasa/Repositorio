@@ -3,7 +3,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Verdana", Geneva, sans-serif; /* Fonte exigida */
+  font-family: "Verdana", Geneva, sans-serif;
+  /* Fonte exigida */
 }
 
 /* Rolagem suave para o menu interno funcionar deslizando */
@@ -14,7 +15,8 @@ html {
 body {
   background-color: #f8f9fa;
   color: #111111;
-  font-size: 1.15rem; /* Tamanho base maior para legibilidade */
+  font-size: 1.15rem;
+  /* Tamanho base maior para legibilidade */
   line-height: 1.6;
   overflow-x: hidden;
 
@@ -115,7 +117,8 @@ input {
 
 /* ESTRUTURA DAS SEÇÕES */
 .section {
-  min-height: 85vh; /* Ocupa quase a tela inteira */
+  min-height: 85vh;
+  /* Ocupa quase a tela inteira */
   padding: clamp(48px, 8vw, 60px) clamp(20px, 5vw, 40px);
   display: flex;
   align-items: center;
@@ -174,7 +177,8 @@ input {
   width: 100%;
   aspect-ratio: 16 / 10;
   height: auto;
-  object-fit: cover; /* Mantém o vídeo preenchendo a área sem distorcer */
+  object-fit: cover;
+  /* Mantém o vídeo preenchendo a área sem distorcer */
   border-radius: 16px;
   box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
   display: block;
@@ -186,7 +190,8 @@ input {
 }
 
 .informativo-section p {
-  white-space: pre-line; /* Preserva as quebras de linha do texto */
+  white-space: pre-line;
+  /* Preserva as quebras de linha do texto */
   margin-bottom: 30px;
 }
 
@@ -413,4 +418,418 @@ footer {
     padding: 20px;
     font-size: 0.95rem;
   }
+}
+
+.info-impressao {
+  display: none;
+}
+
+.observacoes-impressao {
+  display: none;
+}
+
+.conferencia-impressao {
+  display: none;
+}
+
+.btn-imprimir {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    margin-top: 15px;
+    padding: 10px 18px;
+
+    background-color: #f5c400;
+    color: #111111;
+
+    border: none;
+    border-radius: 8px;
+
+    font-family: "Verdana", Geneva, sans-serif;
+    font-size: 0.95rem;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.btn-imprimir i {
+    font-size: 1rem;
+}
+
+.btn-imprimir:hover {
+    background-color: #ffd633;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.18);
+}
+
+.btn-imprimir:active {
+    transform: translateY(0);
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.btn-imprimir:focus-visible {
+    outline: 3px solid rgba(245, 196, 0, 0.35);
+    outline-offset: 3px;
+}
+
+@media print {
+
+  @page {
+    size: A4 landscape;
+    margin: 0.5cm;
+  }
+
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    background: #ffffff !important;
+    overflow: visible !important;
+  }
+
+  /* =====================================
+       ESCONDE ELEMENTOS DESNECESSÁRIOS
+       ===================================== */
+
+  .navbar,
+  footer,
+  .btn-imprimir,
+  .btn-voltar,
+  .acoes-final,
+  .dica-tarefas,
+  .breadcrumb {
+    display: none !important;
+  }
+
+  /* =====================================
+       ÁREA DA IMPRESSÃO
+       ===================================== */
+
+  #blocoFinal {
+    display: block !important;
+
+    position: static !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: #ffffff !important;
+    overflow: visible !important;
+  }
+
+  /* =====================================
+   CABEÇALHO DE IMPRESSÃO
+   ===================================== */
+
+  .cabecalho-tarefas {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 0 8px 0 !important;
+    padding: 0 0 6px 0 !important;
+
+    border-bottom: 2px solid #000 !important;
+  }
+
+  .cabecalho-tarefas h2 {
+    margin: 0 0 3px 0 !important;
+
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+
+    color: #000 !important;
+  }
+
+  .cabecalho-tarefas p {
+    margin: 0 !important;
+
+    font-size: 9px !important;
+    line-height: 1.2 !important;
+
+    color: #000 !important;
+  }
+
+  /* =====================================
+       CONTAINER DA TABELA
+       ===================================== */
+
+  .tabela-container {
+    width: 100% !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: none !important;
+    box-shadow: none !important;
+
+    background: #ffffff !important;
+
+    overflow: visible !important;
+  }
+
+  .tabela-header {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 0 5px 0 !important;
+    padding: 0 !important;
+
+    background: white !important;
+
+    border: none !important;
+
+    font-size: 11px !important;
+    font-weight: bold !important;
+
+    color: #000 !important;
+  }
+
+  .tabela-header i {
+    display: none !important;
+  }
+
+  .tabela-scroll {
+    display: block !important;
+
+    width: 100% !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: visible !important;
+  }
+
+  /* =====================================
+       TABELA
+       ===================================== */
+
+  #tabelaEscala {
+    width: 100% !important;
+
+    height: auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+
+    table-layout: fixed !important;
+  }
+
+  #tabelaEscala th,
+  #tabelaEscala td {
+    border: 1px solid #000000 !important;
+    background: #fff !important;
+    color: #000 !important;
+
+    /* REDUZ O ESPAÇO VERTICAL */
+    padding: 2px 3px !important;
+
+    font-size: 8px !important;
+    line-height: 1.05 !important;
+    vertical-align: top !important;
+
+    /* Evita quebras desnecessárias */
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  #tabelaEscala th {
+    text-align: center !important;
+    font-size: 8.5px !important;
+    font-weight: bold !important;
+
+    padding: 3px 2px !important;
+
+    line-height: 1.05 !important;
+}
+
+  /* Primeira coluna: nomes */
+  #tabelaEscala th:first-child,
+  #tabelaEscala td:first-child {
+    width: 12% !important;
+  }
+
+  /* =====================================
+       PESSOAS
+       ===================================== */
+
+  .pessoa-tabela {
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 3px !important;
+  }
+
+  .avatar-pessoa {
+    display: none !important;
+  }
+
+  .nome-pessoa-tabela strong {
+    font-size: 9px !important;
+
+    color: #000 !important;
+
+    font-weight: bold !important;
+  }
+
+  /* =====================================
+       TAREFAS
+       ===================================== */
+
+  .tarefa-card {
+    display: block !important;
+    width: auto !important;
+
+    margin: 1px 0 !important;
+    padding: 2px 3px !important;
+
+    border: 1px solid #000 !important;
+    border-radius: 2px !important;
+
+    background: #fff !important;
+    color: #000 !important;
+    box-shadow: none !important;
+
+    font-size: 7.5px !important;
+    line-height: 1.05 !important;
+
+    min-height: 0 !important;
+}
+
+  .titulo-tarefa {
+    font-size: 7.5px !important;
+    font-weight: normal !important;
+    line-height: 1.05 !important;
+}
+
+  .alerta-duplicada {
+    display: none !important;
+  }
+
+  /* =====================================
+       EVITA QUEBRAS
+       ===================================== */
+
+  #tabelaEscala {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  #tabelaEscala tr {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  #tabelaEscala th,
+  #tabelaEscala td {
+    border: 1px solid #000 !important;
+
+    background: #fff !important;
+    color: #000 !important;
+
+    padding: 4px !important;
+
+    font-size: 8.5px !important;
+
+    line-height: 1.2 !important;
+
+    vertical-align: top !important;
+  }
+
+  .info-impressao {
+    display: flex !important;
+
+    width: 100% !important;
+
+    justify-content: flex-start !important;
+
+    gap: 50px !important;
+
+    margin: 5px 0 8px 0 !important;
+
+    padding: 5px 0 !important;
+
+    border-top: 1px solid #000 !important;
+    border-bottom: 1px solid #000 !important;
+
+    font-size: 9px !important;
+
+    color: #000 !important;
+  }
+
+  .campo-impressao {
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 4px !important;
+  }
+
+  .linha-preenchimento {
+    white-space: nowrap !important;
+  }
+
+  .observacoes-impressao {
+    display: block !important;
+
+    margin-top: 8px !important;
+
+    font-size: 9px !important;
+
+    color: #000 !important;
+  }
+
+  .observacoes-impressao span {
+    display: block !important;
+
+    margin-top: 5px !important;
+  }
+
+  .conferencia-impressao {
+    display: flex !important;
+
+    justify-content: space-between !important;
+
+    margin-top: 8px !important;
+
+    padding-top: 5px !important;
+
+    border-top: 1px solid #000 !important;
+
+    font-size: 9px !important;
+
+    color: #000 !important;
+  }
+
 }
