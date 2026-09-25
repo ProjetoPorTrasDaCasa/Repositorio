@@ -214,14 +214,34 @@ body {
 /* 40% para a Imagem de Destaque */
 .image-section {
   flex: 4;
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.75)),
-    url("https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1000&auto=format&fit=crop");
-  background-size: cover;
-  background-position: center;
+  position: relative; /* Adicionado para prender o fundo espelhado */
   display: flex;
   align-items: flex-end;
   padding: 50px;
   color: #ffffff;
+  overflow: hidden; /* Garante que nada passe dos limites da caixa */
+}
+
+/* Pseudoelemento para espelhar apenas a imagem sem afetar o texto */
+.image-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.75)),
+    url("./fotoevideo/imagem-login.jpg");
+  background-size: cover;
+  background-position: center;
+  transform: scaleX(-1); /* <-- Isso espelha a imagem na horizontal */
+  z-index: 0;
+}
+
+/* Mantém o texto da imagem por cima do fundo */
+.overlay-text {
+  position: relative;
+  z-index: 1;
 }
 
 .overlay-text h3 {
