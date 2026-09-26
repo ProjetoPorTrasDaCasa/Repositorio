@@ -155,7 +155,7 @@ input {
 }
 
 .hero-text {
-  flex: 1;
+  flex: 6.5;
 }
 
 .hero-text h2 {
@@ -170,19 +170,64 @@ input {
 }
 
 .hero-image {
-  flex: 1;
+  flex: 3.5;
 }
 
 .hero-image video {
   width: 100%;
-  aspect-ratio: 16 / 10;
-  height: auto;
+  aspect-ratio: 9 / 16;
+  max-height: 65vh; /* evita que o vídeo estoure a tela em telas altas */
   object-fit: cover;
-  /* Mantém o vídeo preenchendo a área sem distorcer */
   border-radius: 16px;
   box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
   display: block;
+  margin: 0 auto; /* centraliza dentro da coluna de 30% */
 }
+
+/* cu */
+
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+}
+
+.hero-image video {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  max-height: 65vh;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
+  display: block;
+  margin: 0 auto;
+}
+
+.icon-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.55);
+  color: #ffffff;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.4s ease, transform 0.3s ease;
+  pointer-events: none; /* clique passa direto pro wrapper */
+}
+
+.icon-overlay.hidden {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* cu */
 
 /* 1.5. SEÇÃO INFORMATIVA */
 .informativo-section {
@@ -317,6 +362,16 @@ footer {
 
   .hero-content {
     flex-direction: column;
+  }
+
+  .hero-text,
+  .hero-image {
+    flex: 1; /* reseta pra 100% cada, empilhados */
+    width: 100%;
+  }
+
+  .hero-image video {
+    max-height: 50vh; /* menos espaço vertical no celular */
   }
 
   .cursos-cards {
