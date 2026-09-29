@@ -1,8 +1,12 @@
-# 🏠 Por Trás da Casa
+<p align="center">
+  <img src="fotoevideo/Logo.png" alt="Logo Por Trás da Casa" width="180" />
+</p>
 
-> **Conscientização, apoio e divisão justa do trabalho doméstico.**
+<h1 align="center">Por Trás da Casa</h1>
 
-O **Por Trás da Casa** é uma plataforma web desenvolvida para conscientizar sobre a sobrecarga do trabalho doméstico não remunerado e oferecer ferramentas práticas que promovam uma divisão mais equilibrada e colaborativa das tarefas do dia a dia no ambiente familiar.
+<p align="center">
+  <strong>Conscientização, apoio e divisão justa do trabalho doméstico.</strong>
+</p>
 
 ---
 
@@ -32,14 +36,14 @@ O projeto surge com a missão de:
 
 - **HTML5:** Estrutura semântica das páginas web.
 - **CSS3:** Estilização visual, layout responsivo e transições.
-- **JavaScript (ES6):** Manipulação de elementos interativos (como o player customizado de vídeo).
+- **JavaScript (ES6):** Manipulação de elementos interativos.
 - **Font Awesome:** Ícones vetoriais integrados na interface.
 
 ---
 
 ## 👥 Sobre os Idealizadores
 
-Este projeto foi concebido e desenvolvido por um grupo de estudantes do PROA & Serasa Experian com o propósito de colocar em prática uma ação social e beneficente. Através da tecnologia e da informação, buscamos incentivar transformações positivas e promover o apoio mútuo nas rotinas familiares.
+Este projeto foi concebido e desenvolvido por um grupo de estudantes com o propósito de colocar em prática uma ação social e beneficente. Através da tecnologia e da informação, buscamos incentivar transformações positively e promover o apoio mútuo nas rotinas familiares.
 
 ---
 
