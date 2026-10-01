@@ -43,7 +43,7 @@ O projeto surge com a missão de:
 
 ## 👥 Sobre os Idealizadores
 
-Este projeto foi concebido e desenvolvido por um grupo de estudantes com o propósito de colocar em prática uma ação social e beneficente. Através da tecnologia e da informação, buscamos incentivar transformações positively e promover o apoio mútuo nas rotinas familiares.
+Este projeto foi concebido e desenvolvido por um grupo de estudantes com o propósito de colocar em prática uma ação social e beneficente. Através da tecnologia e da informação, buscamos incentivar transformações positivas e promover o apoio mútuo nas rotinas familiares.
 
 ---
 
