@@ -287,7 +287,8 @@ input:focus {
 
 input::placeholder {
 
-    color: #999999;
+    color: #F5F5F5;
+    opacity: 80%;
 
 }
 

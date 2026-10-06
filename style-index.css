@@ -14,7 +14,7 @@ html {
 
 body {
   background-color: #f8f9fa;
-  color: #111111;
+  color: #35231B;
   font-size: 1.15rem;
   /* Tamanho base maior para legibilidade */
   line-height: 1.6;
@@ -81,7 +81,7 @@ input {
 .nav-links a {
   display: block;
   text-decoration: none;
-  color: #3F3029;
+  color: #35231B;
   font-weight: bold;
   font-size: 1.1rem;
   padding: 8px 12px;
@@ -92,7 +92,7 @@ input {
 
 .nav-links a:hover,
 .nav-links a:focus {
-  color: #fdb524;
+  color: #ED820E;
   background-color: #e9ecef;
 }
 
@@ -138,7 +138,7 @@ input {
 
 .placeholder-text {
   font-size: clamp(1.05rem, 3vw, 1.3rem);
-  color: #444444;
+  color: #35231B;
 }
 
 /* 1. SEÇÃO HERO / TAREFAS */
@@ -165,7 +165,7 @@ input {
 
 .hero-subtitle {
   font-size: clamp(1.05rem, 3vw, 1.3rem);
-  color: #333333;
+  color: #35231B;
   margin: 20px 0 35px 0;
 }
 
