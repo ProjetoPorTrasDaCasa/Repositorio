@@ -14,7 +14,7 @@ html {
 
 body {
   background-color: #f8f9fa;
-  color: #35231B;
+  color: #35231b;
   font-size: 1.15rem;
   /* Tamanho base maior para legibilidade */
   line-height: 1.6;
@@ -27,7 +27,8 @@ body {
 
 button,
 a,
-input {
+input,
+textarea {
   cursor: url("https://api.iconify.design/lucide:mouse-pointer-2.svg?color=black&width=32&height=32"),
     auto !important;
 }
@@ -36,7 +37,7 @@ input {
 .navbar {
   position: sticky;
   top: 0;
-  background-color: #FDF4E3;
+  background-color: #fdf4e3;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -59,11 +60,11 @@ input {
 
 .logo h1 {
   font-size: 1.6rem;
-  color: #35231B;
+  color: #35231b;
 }
 
 .logo h1 span {
-  color: #ED820E;
+  color: #ed820e;
 }
 
 .nav-links {
@@ -81,7 +82,7 @@ input {
 .nav-links a {
   display: block;
   text-decoration: none;
-  color: #35231B;
+  color: #35231b;
   font-weight: bold;
   font-size: 1.1rem;
   padding: 8px 12px;
@@ -92,13 +93,13 @@ input {
 
 .nav-links a:hover,
 .nav-links a:focus {
-  color: #ED820E;
+  color: #ed820e;
   background-color: #e9ecef;
 }
 
 .btn-nav-login {
-  background-color: #FFC857;
-  color: #35231B !important;
+  background-color: #ffc857;
+  color: #35231b !important;
   padding: 10px 20px !important;
   border-radius: 8px;
   display: flex;
@@ -112,7 +113,7 @@ input {
 }
 
 .btn-nav-login:hover {
-  background-color: #ED820E !important;
+  background-color: #ed820e !important;
 }
 
 /* ESTRUTURA DAS SEÇÕES */
@@ -133,12 +134,12 @@ input {
 .section h2 {
   font-size: clamp(1.8rem, 5vw, 2.3rem);
   margin-bottom: 20px;
-  color: #35231B;
+  color: #35231b;
 }
 
 .placeholder-text {
   font-size: clamp(1.05rem, 3vw, 1.3rem);
-  color: #35231B;
+  color: #35231b;
 }
 
 /* 1. SEÇÃO HERO / TAREFAS */
@@ -165,26 +166,13 @@ input {
 
 .hero-subtitle {
   font-size: clamp(1.05rem, 3vw, 1.3rem);
-  color: #35231B;
+  color: #35231b;
   margin: 20px 0 35px 0;
 }
 
 .hero-image {
   flex: 3.5;
 }
-
-.hero-image video {
-  width: 100%;
-  aspect-ratio: 9 / 16;
-  max-height: 65vh; /* evita que o vídeo estoure a tela em telas altas */
-  object-fit: cover;
-  border-radius: 16px;
-  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
-  display: block;
-  margin: 0 auto; /* centraliza dentro da coluna de 30% */
-}
-
-/* cu */
 
 .video-wrapper {
   position: relative;
@@ -227,11 +215,9 @@ input {
   transform: translate(-50%, -50%) scale(1.1);
 }
 
-/* cu */
-
 /* 1.5. SEÇÃO INFORMATIVA */
 .informativo-section {
-  background-color: #FDF4E3;
+  background-color: #fdf4e3;
 }
 
 .informativo-section p {
@@ -246,7 +232,7 @@ input {
 
 /* Transforma o <button> no mesmo estilo visual dos botões do site */
 .informativo-section button {
-  background-color: #FFC857;
+  background-color: #ffc857;
   color: #ffffff;
   font-size: 1.25rem;
   font-weight: bold;
@@ -259,7 +245,7 @@ input {
 
 .informativo-section button:hover,
 .informativo-section button:focus {
-  background-color: #FFC857;
+  background-color: #ffc857;
   transform: scale(1.04);
   box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
 }
@@ -282,13 +268,13 @@ input {
 }
 
 .btn-hero {
-  background-color: #ED820E;
-  color: #35213B;
+  background-color: #ed820e;
+  color: #35231b;
 }
 
 .btn-secondary {
-  background-color: #ED820E;
-  color: #35213B;
+  background-color: #ed820e;
+  color: #35231b;
 }
 
 /* 2. SEÇÃO DE CURSOS */
@@ -309,7 +295,7 @@ input {
 
 .card {
   flex: 1;
-  background: #F7E6D0;
+  background: #f7e6d0;
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
@@ -318,7 +304,7 @@ input {
 .card h3 {
   font-size: 1.5rem;
   margin-bottom: 10px;
-  color: #35231B;
+  color: #35231b;
 }
 
 .card p {
@@ -331,18 +317,112 @@ input {
 
 /* 3. SEÇÃO SOBRE NÓS & 4. CONTATO */
 .sobre-section {
-  background-color: #FDF4E3;
+  background-color: #fdf4e3;
 }
 
 .contato-section {
   background-color: #ffffff;
 }
 
+/* FORMULÁRIO DE CONTATO */
+.contato-intro {
+  margin-bottom: 30px;
+}
+
+.contato-form {
+  background-color: #fdf4e3;
+  padding: clamp(22px, 4vw, 36px);
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.form-linha {
+  display: flex;
+  gap: 20px;
+}
+
+.form-grupo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-grupo label {
+  font-weight: bold;
+  color: #35231b;
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+}
+
+.form-grupo input,
+.form-grupo textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 1.05rem;
+  color: #111111;
+  background-color: #ffffff;
+  border: 2px solid #e8d5b7;
+  border-radius: 8px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-grupo textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.form-grupo input:focus,
+.form-grupo textarea:focus {
+  outline: none;
+  border-color: #ed820e;
+  box-shadow: 0 0 0 4px rgba(237, 130, 14, 0.2);
+}
+
+.btn-enviar {
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-enviar:disabled {
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
+}
+
+.form-status {
+  margin-top: 18px;
+  font-weight: bold;
+  min-height: 1.6em;
+}
+
+.form-status.sucesso {
+  color: #2e7d32;
+}
+
+.form-status.erro {
+  color: #c62828;
+}
+
+.campo-oculto {
+  position: absolute;
+  left: -9999px;
+}
+
+@media (max-width: 560px) {
+  .form-linha {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
 /* RODAPÉ */
 footer {
   text-align: center;
   padding: 25px;
-  background-color: #35231B;
+  background-color: #35231b;
   color: #ffffff;
   font-size: 1.1rem;
 }
@@ -488,59 +568,56 @@ footer {
 }
 
 .btn-imprimir {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 
-    margin-top: 15px;
-    padding: 10px 18px;
+  margin-top: 15px;
+  padding: 10px 18px;
 
-    background-color: #f5c400;
-    color: #111111;
+  background-color: #f5c400;
+  color: #111111;
 
-    border: none;
-    border-radius: 8px;
+  border: none;
+  border-radius: 8px;
 
-    font-family: "Verdana", Geneva, sans-serif;
-    font-size: 0.95rem;
-    font-weight: bold;
+  font-family: "Verdana", Geneva, sans-serif;
+  font-size: 0.95rem;
+  font-weight: bold;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
 
-    transition:
-        background-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .btn-imprimir i {
-    font-size: 1rem;
+  font-size: 1rem;
 }
 
 .btn-imprimir:hover {
-    background-color: #ffd633;
+  background-color: #ffd633;
 
-    transform: translateY(-2px);
+  transform: translateY(-2px);
 
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.18);
 }
 
 .btn-imprimir:active {
-    transform: translateY(0);
+  transform: translateY(0);
 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .btn-imprimir:focus-visible {
-    outline: 3px solid rgba(245, 196, 0, 0.35);
-    outline-offset: 3px;
+  outline: 3px solid rgba(245, 196, 0, 0.35);
+  outline-offset: 3px;
 }
 
 @media print {
-
   @page {
     size: A4 landscape;
     margin: 0.5cm;
@@ -726,7 +803,7 @@ footer {
     padding: 3px 2px !important;
 
     line-height: 1.05 !important;
-}
+  }
 
   /* Primeira coluna: nomes */
   #tabelaEscala th:first-child,
@@ -780,13 +857,13 @@ footer {
     line-height: 1.05 !important;
 
     min-height: 0 !important;
-}
+  }
 
   .titulo-tarefa {
     font-size: 7.5px !important;
     font-weight: normal !important;
     line-height: 1.05 !important;
-}
+  }
 
   .alerta-duplicada {
     display: none !important;
@@ -886,5 +963,4 @@ footer {
 
     color: #000 !important;
   }
-
 }
