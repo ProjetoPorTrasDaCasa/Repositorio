@@ -287,8 +287,8 @@ input:focus {
 
 input::placeholder {
 
-    color: #F5F5F5;
-    opacity: 80%;
+    color: #707070;
+    
 
 }
 
@@ -1287,7 +1287,7 @@ input::placeholder {
 
     background-color: #ED820E;
 
-    color: white;
+    color: #35231b;
 
     padding:
         13px 24px;
