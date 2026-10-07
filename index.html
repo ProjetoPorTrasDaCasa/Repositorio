@@ -47,19 +47,23 @@
               dia.
             </p>
             <a href="DivisorDeTarefas.html" class="btn btn-hero"
-              >Criar Divisão de Tarefas</a>
+              >Criar Divisão de Tarefas</a
+            >
           </div>
           <div class="hero-image">
             <div class="video-wrapper" id="videoWrapper">
               <video loop id="heroVideo" playsinline>
-                <source src="./fotoevideo/videobrenda (1).mp4" type="video/mp4" />
+                <source
+                  src="./fotoevideo/videobrenda (1).mp4"
+                  type="video/mp4"
+                />
               </video>
               <div class="icon-overlay" id="iconOverlay">
                 <i class="fa-solid fa-play"></i>
               </div>
             </div>
           </div>
-          </div>
+        </div>
       </section>
 
       <!-- 1.5 SEÇÃO INFORMATIVA -->
@@ -133,12 +137,76 @@
       <section id="contato" class="section contato-section">
         <div class="section-container">
           <h2>Contato e Sugestões</h2>
-          <p class="placeholder-text">
-            Esta área é destinada ao nosso SAC.
-            <br />
-            Queremos ouvir de você, quais suas sugestões e dúvidas para melhorar
-            o sistema?
+          <p class="placeholder-text contato-intro">
+            Este é o nosso canal de atendimento ao usuário (SAC). Sua opinião é
+            essencial para aprimorarmos o sistema. Envie suas dúvidas, sugestões
+            ou críticas pelo formulário abaixo e analisaremos cada mensagem com
+            atenção.
           </p>
+
+          <form
+            id="formContato"
+            class="contato-form"
+            action="https://formspree.io/f/xzeddeba"
+            method="POST"
+          >
+            <div class="form-linha">
+              <div class="form-grupo">
+                <label for="contatoNome">Nome</label>
+                <input
+                  type="text"
+                  id="contatoNome"
+                  name="nome"
+                  placeholder="Como podemos te chamar?"
+                  autocomplete="name"
+                  required
+                />
+              </div>
+
+              <div class="form-grupo">
+                <label for="contatoEmail">E-mail</label>
+                <input
+                  type="email"
+                  id="contatoEmail"
+                  name="email"
+                  placeholder="seuemail@exemplo.com"
+                  autocomplete="email"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-grupo">
+              <label for="contatoMensagem">Sua sugestão ou dúvida</label>
+              <textarea
+                id="contatoMensagem"
+                name="mensagem"
+                rows="6"
+                placeholder="Escreva aqui a sua mensagem..."
+                required
+              ></textarea>
+            </div>
+
+            <!-- Campo oculto anti-spam (não remover) -->
+            <input
+              type="text"
+              name="_gotcha"
+              class="campo-oculto"
+              tabindex="-1"
+              autocomplete="off"
+            />
+
+            <button type="submit" class="btn btn-hero btn-enviar">
+              <i class="fa-solid fa-paper-plane"></i> Enviar mensagem
+            </button>
+
+            <p
+              id="contatoStatus"
+              class="form-status"
+              role="status"
+              aria-live="polite"
+            ></p>
+          </form>
         </div>
       </section>
     </main>
@@ -148,32 +216,68 @@
     </footer>
 
     <script>
-      const wrapper = document.getElementById('videoWrapper');
-      const video = document.getElementById('heroVideo');
-      const overlay = document.getElementById('iconOverlay');
-      const icon = overlay.querySelector('i');
-    
+      const wrapper = document.getElementById("videoWrapper");
+      const video = document.getElementById("heroVideo");
+      const overlay = document.getElementById("iconOverlay");
+      const icon = overlay.querySelector("i");
+
       let hideTimeout;
-    
+
       function showIconBriefly() {
         clearTimeout(hideTimeout);
-        overlay.classList.remove('hidden');
+        overlay.classList.remove("hidden");
         hideTimeout = setTimeout(() => {
-          overlay.classList.add('hidden');
+          overlay.classList.add("hidden");
         }, 900); // some depois de ~0.9s
       }
-    
-      wrapper.addEventListener('click', () => {
+
+      wrapper.addEventListener("click", () => {
         if (video.paused) {
           video.play();
-          icon.classList.remove('fa-play');
-          icon.classList.add('fa-pause');
+          icon.classList.remove("fa-play");
+          icon.classList.add("fa-pause");
         } else {
           video.pause();
-          icon.classList.remove('fa-pause');
-          icon.classList.add('fa-play');
+          icon.classList.remove("fa-pause");
+          icon.classList.add("fa-play");
         }
         showIconBriefly();
+      });
+
+      // ===== FORMULÁRIO DE CONTATO (Formspree) =====
+      const formContato = document.getElementById("formContato");
+      const statusContato = document.getElementById("contatoStatus");
+
+      formContato.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const botao = formContato.querySelector('button[type="submit"]');
+
+        botao.disabled = true;
+        statusContato.className = "form-status";
+        statusContato.textContent = "Enviando...";
+
+        try {
+          const resposta = await fetch(formContato.action, {
+            method: "POST",
+            body: new FormData(formContato),
+            headers: { Accept: "application/json" },
+          });
+
+          if (resposta.ok) {
+            formContato.reset();
+            statusContato.classList.add("sucesso");
+            statusContato.textContent =
+              "Mensagem enviada com sucesso! Obrigado pelo seu contato.";
+          } else {
+            throw new Error("Falha no envio");
+          }
+        } catch (erro) {
+          statusContato.classList.add("erro");
+          statusContato.textContent =
+            "Não foi possível enviar agora. Tente novamente em instantes.";
+        } finally {
+          botao.disabled = false;
+        }
       });
     </script>
   </body>
