@@ -23,7 +23,7 @@
         </header>
 
         <!-- Botão Google -->
-        <button class="btn btn-google" type="button">
+        <button class="btn btn-google" type="button" onclick="alerta()">
           <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google Logo">
           Entrar com o Google
         </button>
@@ -42,16 +42,16 @@
           <div class="input-group">
             <label for="senha">Sua senha</label>
             <input type="password" id="senha" placeholder="••••••••" required>
-            <a href="#" class="forgot-pass">Esqueceu a senha?</a>
+            <a href="#" class="forgot-pass" onclick="alerta()">Esqueceu a senha?</a>
           </div>
 
-          <button type="submit" class="btn btn-primary">ENTRAR NA CONTA</button>
+          <button type="submit" class="btn btn-primary" onclick="alerta()" >ENTRAR NA CONTA</button>
         </form>
 
         <!-- Acesso sem cadastro -->
         <a href="index.html" class="btn btn-outline">Continuar sem conta por enquanto</a>
         <p class="signup-text">
-          Ainda não tem conta? <a href="#">Criar nova conta agora</a>
+          Ainda não tem conta? <a href="#" onclick="alerta()" >Criar nova conta agora</a>
         </p>
 
       </div>
@@ -66,7 +66,11 @@
     </aside>
 
   </div>
-
+  <script>
+    function alerta() {
+      window.alert("Esta função não esta disponível no momento :(")
+    }
+  </script>
 </body>
 
 </html>
